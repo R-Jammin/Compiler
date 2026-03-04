@@ -20,6 +20,7 @@
 "("           { return TOK_LPAREN; }
 ")"           { return TOK_RPAREN; }
 "+"           { return TOK_ADD; }
+"-"           { return TOK_SUB; }
 
 ";"           { return TOK_SEMI; }
 "="		      { return TOK_EQUAL; }

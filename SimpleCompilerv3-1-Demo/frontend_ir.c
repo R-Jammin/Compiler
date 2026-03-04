@@ -78,10 +78,42 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         else if (binOpExpr->BinOpType == SUBTRACTION) {
             
             // TO DO
+            funcCode(prog, binOpExpr->rOperand, symbolTable);
+            funcCode(prog, binOpExpr->lOperand, symbolTable);
+      
+            fprintf(prog, "    ; loading values for binary operation\n\n");
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n\n", ssaIndex, ssaIndex-2);
+            ssaIndex++;
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n\n", ssaIndex, ssaIndex-2);
+            ssaIndex++;
+
+
+            fprintf(prog, "    %%%d = sub i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
+            ssaIndex++;
+            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex-1, ssaIndex);
+            ssaIndex++;
+        
         }
         else if (binOpExpr->BinOpType == MULTIPLICATION) {
             
             // TO DO
+            funcCode(prog, binOpExpr->rOperand, symbolTable);
+            funcCode(prog, binOpExpr->lOperand, symbolTable);
+      
+            fprintf(prog, "    ; loading values for binary operation\n\n");
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n\n", ssaIndex, ssaIndex-2);
+            ssaIndex++;
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n\n", ssaIndex, ssaIndex-2);
+            ssaIndex++;
+
+
+            fprintf(prog, "    %%%d = mult i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
+            ssaIndex++;
+            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex-1, ssaIndex);
+            ssaIndex++;
+        
         }
 
     } else if (parseTree->type == UNOP) {

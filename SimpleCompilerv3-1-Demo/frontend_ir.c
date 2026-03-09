@@ -140,19 +140,23 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         else if (unOpExpr->UnOpType == DECLASSIGN) {
             
             // TO DO
-             funcCode(prog, unOpExpr->rOperand, symbolTable);
+               funcCode(prog, unOpExpr->rOperand, symbolTable);
 
             for (int x = 0; x < symbolTable->totalEntries; ++x)
             {
-                  if (!strcmp(symbolTable[x].symbolName, unOpExpr->rOperand)){
-                    fprintf(prog, "    %%%d = alloca i32, align 4\n", symbolTable[x].symbolLocation);
-                    fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, ssaIndex - 1);
-                    fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex, symbolTable[x].symbolLocation);
-                    ssaIndex++;
-                    break;
-             }
+             if (!strcmp(symbolTable[x].symbolName, unOpExpr->rOperand->string))
+               {
+                fprintf(prog, "    %%%d = alloca i32, align 4\n", symbolTable[x].symbolLocation);
+
+                fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",ssaIndex, ssaIndex - 1);
+
+                fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex, symbolTable[x].symbolLocation);
+
+                 ssaIndex++;
+                break;
+            }
+        }
     }
  
         }
     }
-}

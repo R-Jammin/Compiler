@@ -54,8 +54,12 @@ ParseTree *intType(int constantValue) {
 ParseTree *stringType(char *string) {
     
     // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    parseTree->type = STRING;
+    parseTree->string = string;
+    return parseTree;
 }
+
 
 ParseTree *add(ParseTree *lOperand, ParseTree *rOperand) {
     ParseTree *parseTree = malloc(sizeof(parseTree));

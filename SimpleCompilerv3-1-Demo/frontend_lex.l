@@ -21,6 +21,9 @@
 ")"           { return TOK_RPAREN; }
 "+"           { return TOK_ADD; }
 "-"           { return TOK_SUB; }
+"*"           { return TOK_MUL; }
+"!"			  { return TOK_LOGICAL_NEGATION;}
+
 
 ";"           { return TOK_SEMI; }
 "="		      { return TOK_EQUAL; }

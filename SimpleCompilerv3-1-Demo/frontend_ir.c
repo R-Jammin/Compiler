@@ -88,7 +88,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             ssaIndex++;
 
 
-            fprintf(prog, "    %%%d = sub i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
+            fprintf(prog, "    %%%d = subtract i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
             ssaIndex++;
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
             fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex-1, ssaIndex);
@@ -108,7 +108,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             ssaIndex++;
 
 
-            fprintf(prog, "    %%%d = mult i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
+            fprintf(prog, "    %%%d = multiply i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
             ssaIndex++;
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
             fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex-1, ssaIndex);
@@ -122,11 +122,42 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         if (unOpExpr->UnOpType == LOGICALNEGATION) {
             
             // TO DO
+            funcCode(prog, unOpExpr->rOperand, symbolTable);
+
+            fprintf(prog, "    ; logical negation\n");
+
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, ssaIndex-1);
+            ssaIndex++;
+
+            fprintf(prog, "    %%%d = icmp eq i32 %%%d, 0\n", ssaIndex, ssaIndex-1);
+            ssaIndex++;
+
+            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex-1, ssaIndex);
+            ssaIndex++;
         }
 
         else if (unOpExpr->UnOpType == DECLASSIGN) {
             
             // TO DO
+             funcCode(prog, unOpExpr->rOperand, symbolTable);
+
+            for (int x = 0; x < symbolTable->totalEntries; ++x)
+            {
+                  if (!strcmp(symbolTable[x].symbolName, unOpExpr->rOperand)){
+                    fprintf(prog, "    %%%d = alloca i32, align 4\n", symbolTable[x].symbolLocation);
+                    fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, ssaIndex - 1);
+                    fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex, symbolTable[x].symbolLocation);
+                    ssaIndex++;
+                    break;
+             }
+    }
+           /* ; 1. Declare and allocate stack space for 'x'
+%x = alloca i32, align 4
+
+; 2. Assign the value 10 to 'x'
+store i32 10, ptr %x, align 4
+*/
         }
     }
 }

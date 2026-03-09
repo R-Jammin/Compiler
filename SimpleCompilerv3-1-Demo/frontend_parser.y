@@ -160,16 +160,24 @@ expr:
         value TOK_SUB expr
         {
             // TO DO
+            ParseTree *lOperand = parserStackPop(parserStack);
+            ParseTree *rOperand = parserStackPop(parserStack);
+            parserStackPush(parserStack, subtract(lOperand, rOperand));
         }
         |
         value TOK_MUL expr
         {
             // TO DO
+            ParseTree *lOperand = parserStackPop(parserStack);
+            ParseTree *rOperand = parserStackPop(parserStack);
+            parserStackPush(parserStack, multiply(lOperand, rOperand));
         }
         |
         TOK_LOGICAL_NEGATION expr
         {
             // TO DO
+            ParseTree *operand = parserStackPop(parserStack);
+            parserStackPush(parserStack, logicalNegation(operand));
         }
         |
         value
@@ -180,6 +188,7 @@ value:
         TOK_IDENTIFIER
         {
             // TO DO
+            parserStackPush(parserStack, idType($1));
         }
         |
         number

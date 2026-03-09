@@ -71,25 +71,51 @@ ParseTree *add(ParseTree *lOperand, ParseTree *rOperand) {
 ParseTree *subtract(ParseTree *lint, ParseTree *rint) {
     
     // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
+    binOpExpr->BinOpType = SUBTRACTION;
+    binOpExpr->lOperand = lint;
+    binOpExpr->rOperand = rint;
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+    return parseTree;
 }
 
 ParseTree *multiply(ParseTree *lint, ParseTree *rint) {
     
     // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
+    binOpExpr->BinOpType = MULTIPLICATION;
+    binOpExpr->lOperand = lint;
+    binOpExpr->rOperand = rint;
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+    return parseTree;
 }
 
 ParseTree *logicalNegation(ParseTree *rint) {
 
     // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
+    unOpExpr->UnOpType = LOGICALNEGATION;
+    unOpExpr->rOperand = rint;
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+    return parseTree;
 }
 
 ParseTree *declarationWithAssign(ParseTree *rint) {
 
     // TO DO (and remove the "return 0;")
-    return 0;
+     ParseTree *parseTree = malloc(sizeof(parseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
+    unOpExpr->UnOpType = DECLASSIGN;
+    unOpExpr->rOperand = rint;
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+    return parseTree;
 }
 
 

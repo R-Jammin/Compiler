@@ -129,7 +129,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, ssaIndex-1);
             ssaIndex++;
 
-            fprintf(prog, "    %%%d = icmp eq i32 %%%d, 0\n", ssaIndex, ssaIndex-1);
+            fprintf(prog, "    %%%d = logicalnegation i32 %%%d, 0\n", ssaIndex, ssaIndex-1);
             ssaIndex++;
 
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
@@ -152,12 +152,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
                     break;
              }
     }
-           /* ; 1. Declare and allocate stack space for 'x'
-%x = alloca i32, align 4
-
-; 2. Assign the value 10 to 'x'
-store i32 10, ptr %x, align 4
-*/
+ 
         }
     }
 }

@@ -50,6 +50,11 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             if(!strcmp(symbolTable[x].symbolName, parseTree->string))
             {
                 // TO DO
+            printf("frontend_ir.c found variable in symbol table: %d\n", x);
+
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, symbolTable[x].symbolLocation);
+            ssaIndex++;
+            break;
             }
         }
 

@@ -143,6 +143,7 @@ stmt:
             ParseTree *rOperand = parserStackPop(parserStack);
 
             insertSymbol(symbolTable, (char *)"VAR", (char *)$1, (char *)$2, ++location, 4);
+            
 
             parserStackPush(parserStack, declarationWithAssign(rOperand));
         }

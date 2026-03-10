@@ -49,6 +49,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
     {
           if (!strcmp(symbolTable[x].symbolName, parseTree->string))
         {
+            //TO DO
             printf("frontend_ir.c found variable in symbol table: %d\n", x);
 
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
@@ -155,23 +156,24 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
 
        else if (unOpExpr->UnOpType == DECLASSIGN) {
        
-    funcCode(prog, unOpExpr->rOperand, symbolTable);
+   funcCode(prog, unOpExpr->rOperand, symbolTable);
 
-    for (int x = symbolTable->totalEntries - 1; x >= 0; --x)
+    while (funcCodeSymbolIndex < symbolTable->totalEntries &&
+           strcmp(symbolTable[funcCodeSymbolIndex].entryType, "VAR"))
     {
-        if (!strcmp(symbolTable[x].entryType, "VAR"))
-        {
-            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
-            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
-                    ssaIndex + 1, ssaIndex - 1);
-            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
-                    ssaIndex + 1, ssaIndex);
-
-            symbolTable[x].symbolLocation = ssaIndex;
-            ssaIndex += 2;
-            break;
-        }
+        funcCodeSymbolIndex++;
     }
+
+    fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+    fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
+            ssaIndex + 1, ssaIndex - 1);
+    fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
+            ssaIndex + 1, ssaIndex);
+
+    symbolTable[funcCodeSymbolIndex].symbolLocation = ssaIndex;
+
+    ssaIndex += 2;
+    funcCodeSymbolIndex++;
 }
  
         }

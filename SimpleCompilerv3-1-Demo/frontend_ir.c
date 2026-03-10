@@ -47,23 +47,20 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
 
     for (int x = 0; x < symbolTable->totalEntries; ++x)
     {
-          if (!strcmp(symbolTable[x].symbolName, parseTree->string))
+        if (!strcmp(symbolTable[x].symbolName, parseTree->string))
         {
-            //TO DO
             printf("frontend_ir.c found variable in symbol table: %d\n", x);
 
-            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
-            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
-                    ssaIndex + 1, symbolTable[x].symbolLocation);
-            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
-                    ssaIndex + 1, ssaIndex);
+            fprintf(prog, "    %%%d = getelementptr i32, i32* %%%d, i32 0\n\n",
+                    ssaIndex, symbolTable[x].symbolLocation);
 
-            ssaIndex += 2;
+            ssaIndex++;
             break;
         }
         else if (x == symbolTable->totalEntries - 1)
         {
-            printf("frontend_ir.c not found variable in symbol table: %s\n",parseTree->string);
+            printf("frontend_ir.c not found variable in symbol table: %s\n",
+                   parseTree->string);
         }
     }
 

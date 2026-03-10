@@ -43,26 +43,29 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
 
     }  
     else if (parseTree->type == STRING) {
-        printf("frontend_ir.c stringValue: %s\n", parseTree->string);
+         printf("frontend_ir.c stringValue: %s\n", parseTree->string);
 
-        for(int x = 0; x < symbolTable->totalEntries; ++x)
+    for (int x = 0; x < symbolTable->totalEntries; ++x)
+    {
+         if (!strcmp(symbolTable[x].symbolName, parseTree->string))
         {
-            if(!strcmp(symbolTable[x].symbolName, parseTree->string))
-            {
-                // TO DO
-            printf("frontend_ir.c found variable in symbol table: %d\n",x);
+            printf("frontend_ir.c found variable in symbol table: %d\n", x);
 
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
-            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex + 1, symbolTable[x].symbolLocation);
-            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex + 1, ssaIndex);
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
+                    ssaIndex + 1, symbolTable[x].symbolLocation);
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
+                    ssaIndex + 1, ssaIndex);
 
             ssaIndex += 2;
             break;
-            }
-            else if(x==(symbolTable->totalEntries-1)){
-                printf("frontend_ir.c not found variable in symbol table: %s\n",parseTree->string);
-            }
         }
+        else if (x == symbolTable->totalEntries - 1)
+        {
+            printf("frontend_ir.c not found variable in symbol table: %s\n",
+                   parseTree->string);
+        }
+    }
 
     }  
     else if (parseTree->type == BINOP) {
@@ -151,30 +154,19 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
     ssaIndex++;
         }
 
-        else if (unOpExpr->UnOpType == DECLASSIGN) {
-            
-            // TO DO
-               funcCode(prog, unOpExpr->rOperand, symbolTable);
+       else if (unOpExpr->UnOpType == DECLASSIGN) {
+        funcCode(prog, unOpExpr->rOperand, symbolTable);
 
-    for (int x = 0; x < symbolTable->totalEntries; ++x)
-    {
-        if (!strcmp(symbolTable[x].symbolName, parseTree->string))
-        {
-            printf("frontend_ir.c found variable in symbol table: %d\n", x);
+        fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
 
-            fprintf(prog, "    %%%d = alloca i32, align 4\n", symbolTable[x].symbolLocation);
+        fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex + 1, ssaIndex - 1);
 
-            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
-                    ssaIndex, ssaIndex - 1);
+        fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex + 1, ssaIndex);
 
-            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
-                    ssaIndex, symbolTable[x].symbolLocation);
+        symbolTable[symbolTable->totalEntries - 1].symbolLocation = ssaIndex;
 
-            ssaIndex++;
-            break;
-        }
-    }
-    }
+        ssaIndex += 2;
+}
  
         }
     }

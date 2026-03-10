@@ -140,6 +140,11 @@ stmt:
         TOK_TYPE TOK_IDENTIFIER TOK_EQUAL expr TOK_SEMI
         {
             // TO DO
+            ParseTree *rOperand = parserStackPop(parserStack);
+
+            insertSymbol(symbolTable, (char *)"VAR", (char *)$1, (char *)$2, ++location, 4);
+
+            parserStackPush(parserStack, declarationWithAssign(rOperand));
         }
         |
         TOK_LBRACE stmt_list TOK_RBRACE

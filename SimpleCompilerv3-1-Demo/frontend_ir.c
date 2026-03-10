@@ -50,11 +50,17 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             if(!strcmp(symbolTable[x].symbolName, parseTree->string))
             {
                 // TO DO
-            printf("frontend_ir.c found variable in symbol table: %d\n", x);
+            printf("frontend_ir.c found variable in symbol table: %d\n",x);
 
-            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, symbolTable[x].symbolLocation);
-            ssaIndex++;
+            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex + 1, symbolTable[x].symbolLocation);
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex + 1, ssaIndex);
+
+            ssaIndex += 2;
             break;
+            }
+            else if(x==(symbolTable->totalEntries-1)){
+                printf("frontend_ir.c not found variable in symbol table: %s\n",parseTree->string);
             }
         }
 
@@ -93,7 +99,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             ssaIndex++;
 
 
-            fprintf(prog, "    %%%d = subtract i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
+            fprintf(prog, "    %%%d = sub i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
             ssaIndex++;
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
             fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex-1, ssaIndex);
@@ -113,7 +119,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             ssaIndex++;
 
 
-            fprintf(prog, "    %%%d = multiply i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
+            fprintf(prog, "    %%%d = mul i32 %%%d, %%%d\n", ssaIndex, ssaIndex-2, ssaIndex-1);
             ssaIndex++;
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
             fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex-1, ssaIndex);
@@ -127,19 +133,22 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         if (unOpExpr->UnOpType == LOGICALNEGATION) {
             
             // TO DO
-            funcCode(prog, unOpExpr->rOperand, symbolTable);
+             funcCode(prog, unOpExpr->rOperand, symbolTable);
 
-            fprintf(prog, "    ; logical negation\n");
+    fprintf(prog, "    ; logical negation\n");
 
-            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, ssaIndex-1);
-            ssaIndex++;
+    fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n", ssaIndex, ssaIndex - 1);
+    ssaIndex++;
 
-            fprintf(prog, "    %%%d = logicalnegation i32 %%%d, 0\n", ssaIndex, ssaIndex-1);
-            ssaIndex++;
+    fprintf(prog, "    %%%d = icmp eq i32 %%%d, 0\n", ssaIndex, ssaIndex - 1);
+    ssaIndex++;
 
-            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
-            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex-1, ssaIndex);
-            ssaIndex++;
+    fprintf(prog, "    %%%d = zext i1 %%%d to i32\n", ssaIndex, ssaIndex - 1);
+    ssaIndex++;
+
+    fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+    fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex - 1, ssaIndex);
+    ssaIndex++;
         }
 
         else if (unOpExpr->UnOpType == DECLASSIGN) {
@@ -147,20 +156,24 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             // TO DO
                funcCode(prog, unOpExpr->rOperand, symbolTable);
 
-            for (int x = 0; x < symbolTable->totalEntries; ++x)
-            {
-             if (!strcmp(symbolTable[x].symbolName, unOpExpr->rOperand->string))
-               {
-                fprintf(prog, "    %%%d = alloca i32, align 4\n", symbolTable[x].symbolLocation);
+    for (int x = 0; x < symbolTable->totalEntries; ++x)
+    {
+        if (!strcmp(symbolTable[x].symbolName, parseTree->string))
+        {
+            printf("frontend_ir.c found variable in symbol table: %d\n", x);
 
-                fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",ssaIndex, ssaIndex - 1);
+            fprintf(prog, "    %%%d = alloca i32, align 4\n", symbolTable[x].symbolLocation);
 
-                fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n", ssaIndex, symbolTable[x].symbolLocation);
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
+                    ssaIndex, ssaIndex - 1);
 
-                 ssaIndex++;
-                break;
-            }
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
+                    ssaIndex, symbolTable[x].symbolLocation);
+
+            ssaIndex++;
+            break;
         }
+    }
     }
  
         }

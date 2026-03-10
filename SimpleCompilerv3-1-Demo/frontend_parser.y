@@ -188,7 +188,7 @@ value:
         TOK_IDENTIFIER
         {
             // TO DO
-            parserStackPush(parserStack, idType($1));
+            parserStackPush(parserStack, stringType($1));
         }
         |
         number

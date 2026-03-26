@@ -134,6 +134,11 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             if(!strcmp(symbolTable[x].symbolName, parseTree->string))
             {
                 // TO DO
+                printf("backend_x64.c reloading variable from symbol table: %d\n", x);
+                fprintf(prog, "    mov %s, [rbp-%d]\n",
+                        allocateNewRegister(),
+                        symbolTable[x].symbolLocation);
+                break;
             }
         }
 
@@ -152,11 +157,28 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         else if (binOpExpr->BinOpType == SUBTRACTION) {
             
             // TO DO
+            fprintf(prog, "    sub %s, %s\n", secondToLastRegisterAllocated(), lastRegisterAllocated());
+            fprintf(prog, "    mov [rbp-%d], %s\n",stackLocation * 4 + 4,secondToLastRegisterAllocated());
+            fprintf(prog, "    mov edi, %s\n\n",secondToLastRegisterAllocated());
+            fprintf(prog, "    mov %s, %s\n\n", lastRegisterAllocated(), secondToLastRegisterAllocated());
+            stackLocation++;
             
         }
         else if (binOpExpr->BinOpType == MULTIPLICATION) {
             
             // TO DO
+            fprintf(prog, "    imul %s, %s\n",
+                    secondToLastRegisterAllocated(),
+                    lastRegisterAllocated());
+            fprintf(prog, "    mov [rbp-%d], %s\n",
+                    stackLocation * 4 + 4,
+                    secondToLastRegisterAllocated());
+            fprintf(prog, "    mov edi, %s\n\n",
+                    secondToLastRegisterAllocated());
+            fprintf(prog, "    mov %s, %s\n\n",
+                    lastRegisterAllocated(),
+                    secondToLastRegisterAllocated());
+            stackLocation++;
             
         }
 
@@ -166,23 +188,50 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         if (unOpExpr->UnOpType == LOGICALNEGATION) {
             
             // TO DO
+            funcCode(prog, unOpExpr->rOperand, symbolTable);
+
+            fprintf(prog, "    cmp edi, 0\n");
+            fprintf(prog, "    sete al\n");
+            fprintf(prog, "    movzx edi, al\n");
+            fprintf(prog, "    mov [rbp-%d], edi\n\n", stackLocation * 4 + 4);
+            stackLocation++;
 
         }
 
         else if (unOpExpr->UnOpType == DECLASSIGN) {
             
             // TO DO
+            funcCode(prog, unOpExpr->rOperand, symbolTable);
+
+            while (funcCodeSymbolIndex < symbolTable->totalEntries &&
+                   strcmp(symbolTable[funcCodeSymbolIndex].entryType, "VAR"))
+            {
+                funcCodeSymbolIndex++;
+            }
+
+            if (funcCodeSymbolIndex < symbolTable->totalEntries) {
+                symbolTable[funcCodeSymbolIndex].symbolLocation = stackLocation * 4 + 4;
+                fprintf(prog, "    mov [rbp-%d], edi\n\n",
+                        symbolTable[funcCodeSymbolIndex].symbolLocation);
+                funcCodeSymbolIndex++;
+                stackLocation++;
+            }
         }
 
         else if (unOpExpr->UnOpType == STORETOSTACK) {
             
             // TO DO
+            funcCode(prog, unOpExpr->rOperand, symbolTable);
+            fprintf(prog, "    mov [rbp-%d], edi\n\n", stackLocation * 4 + 4);
+            stackLocation++;
 
         }
 
         else if (unOpExpr->UnOpType == RET) {
             
             // TO DO
+            funcCode(prog, unOpExpr->rOperand, symbolTable);
+            returnValue(prog);
         }
 
 

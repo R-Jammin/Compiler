@@ -54,13 +54,18 @@ ParseTree *intType(int constantValue) {
 ParseTree *stringType(char *string) {
     
     // TO DO (and remove the "return 0;")
-    return 0;
+     ParseTree *parseTree = malloc(sizeof(ParseTree));
+    parseTree->type = STRING;
+    parseTree->string = string;
+    return parseTree;
 }
 
 ParseTree *reload(char *string) {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    parseTree->type = RELOAD;
+    parseTree->string = string;
+    return parseTree;
 }
 
 ParseTree *add() {
@@ -74,38 +79,67 @@ ParseTree *add() {
 
 ParseTree *subtract() {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(BinOpExpr));
+    binOpExpr->BinOpType = SUBTRACTION;
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+    return parseTree;
 }
 
 ParseTree *multiply() {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(BinOpExpr));
+    binOpExpr->BinOpType = MULTIPLICATION;
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+    return parseTree;
+    
 }
 
 ParseTree *logicalNegation(ParseTree *rint) {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    unOpExpr->UnOpType = LOGICALNEGATION;
+    unOpExpr->rOperand = rint;
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+    return parseTree;
 }
 
 ParseTree *declarationWithAssign(ParseTree *rint) {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    unOpExpr->UnOpType = DECLASSIGN;
+    unOpExpr->rOperand = rint;
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+    return parseTree;
 }
 
 ParseTree *storeToStack(ParseTree *rint) {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    unOpExpr->UnOpType = STORETOSTACK;
+    unOpExpr->rOperand = rint;
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+    return parseTree;
 }
 
 ParseTree *ret(ParseTree *rint) {
     
-    // TO DO (and remove the "return 0;")
-    return 0;
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    unOpExpr->UnOpType = RET;
+    unOpExpr->rOperand = rint;
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+    return parseTree;
 }
 
 #endif

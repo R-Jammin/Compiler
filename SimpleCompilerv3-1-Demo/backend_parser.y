@@ -166,6 +166,71 @@ value:
         TOK_IDENTIFIER
         {
             // TO DO
+            parserStackPush(parserStack, stringType($1));
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_GETELEMENTPTR TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_TYPE TOK_UINT
+        {
+            char *ssaName = malloc(20);
+            sprintf(ssaName, "%d", $9);
+            parserStackPush(parserStack, stringType(ssaName));
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_LOAD TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
+        {
+            char *ssaName = malloc(20);
+            sprintf(ssaName, "%d", $9);
+            parserStackPush(parserStack, reload(ssaName));
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ADD TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
+        {
+            parserStackPush(parserStack, add());
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_SUBTRACT TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
+        {
+            parserStackPush(parserStack, subtract());
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_MULTIPLY TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
+        {
+            parserStackPush(parserStack, multiply());
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_CMP TOK_IDENTIFIER TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_UINT
+        {
+            ParseTree *rOperand = parserStackPop(parserStack);
+            parserStackPush(parserStack, logicalNegation(rOperand));
+        }
+        |
+        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ZERO_EXTEND TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_TO TOK_TYPE
+        {
+            /* recognized but no additional parse tree node needed */
+        }
+        |
+        TOK_STORE TOK_TYPE TOK_UINT TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
+        {
+            ParseTree *rOperand = intType($3);
+            parserStackPush(parserStack, storeToStack(rOperand));
+        }
+        |
+        TOK_STORE TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
+        {
+            ParseTree *rOperand = parserStackPop(parserStack);
+            parserStackPush(parserStack, storeToStack(rOperand));
+        }
+        |
+        TOK_RETURN TOK_TYPE TOK_SSAINDEX TOK_UINT
+        {
+            ParseTree *rOperand = parserStackPop(parserStack);
+            parserStackPush(parserStack, ret(rOperand));
+        }
+        |
+        TOK_RETURN TOK_TYPE TOK_UINT
+        {
+            ParseTree *rOperand = intType($3);
+            parserStackPush(parserStack, ret(rOperand));
         }
         |
         number

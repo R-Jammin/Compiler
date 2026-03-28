@@ -135,7 +135,13 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             {
                 // TO DO
                 printf("backend_x64.c reloading variable from symbol table: %d\n", x);
+<<<<<<< HEAD
                 fprintf(prog, "    mov %s, [rbp-%d]\n", allocateNewRegister(), symbolTable[x].symbolLocation);
+=======
+                fprintf(prog, "    mov %s, [rbp-%d]\n",
+                        allocateNewRegister(),
+                        symbolTable[x].symbolLocation);
+>>>>>>> parent of 4cc7d20 (Runs)
                 break;
             }
         }

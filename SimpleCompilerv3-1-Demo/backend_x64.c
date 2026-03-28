@@ -141,7 +141,6 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
                 fprintf(prog, "    mov %s, [rbp-%d]\n",
                         allocateNewRegister(),
                         symbolTable[x].symbolLocation);
->>>>>>> parent of 4cc7d20 (Runs)
                 break;
             }
         }

@@ -167,17 +167,10 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         else if (binOpExpr->BinOpType == MULTIPLICATION) {
             
             // TO DO
-            fprintf(prog, "    imul %s, %s\n",
-                    secondToLastRegisterAllocated(),
-                    lastRegisterAllocated());
-            fprintf(prog, "    mov [rbp-%d], %s\n",
-                    stackLocation * 4 + 4,
-                    secondToLastRegisterAllocated());
-            fprintf(prog, "    mov edi, %s\n\n",
-                    secondToLastRegisterAllocated());
-            fprintf(prog, "    mov %s, %s\n\n",
-                    lastRegisterAllocated(),
-                    secondToLastRegisterAllocated());
+            fprintf(prog, "    imul %s, %s\n", secondToLastRegisterAllocated(),lastRegisterAllocated());
+            fprintf(prog, "    mov [rbp-%d], %s\n", stackLocation * 4 + 4, secondToLastRegisterAllocated());
+            fprintf(prog, "    mov edi, %s\n\n", secondToLastRegisterAllocated());
+            fprintf(prog, "    mov %s, %s\n\n", lastRegisterAllocated(), secondToLastRegisterAllocated());
             stackLocation++;
             
         }

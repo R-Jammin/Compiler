@@ -29,7 +29,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
             {
                 printf("frontend_ir.c found variable in symbol table: %d\n", x);
                 fseek(prog, 0, SEEK_SET); //reset to beginning of file.
-                fprintf(prog, "define i32 @%s() {\n", symbolTable[x].symbolName);  // **** Need to remove the "Final" for assignment #2
+                fprintf(prog, "define i32 @%sFinal() {\n", symbolTable[x].symbolName);  // **** Need to remove the "Final" for assignment #2
             }
         }
 

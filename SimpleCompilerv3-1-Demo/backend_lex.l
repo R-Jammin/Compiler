@@ -72,6 +72,7 @@
 [0-9]+        { yylval.number=atoi(yytext); return TOK_UINT; }
 [a-zA-Z_]+	  { yylval.string=strdup(yytext); return TOK_IDENTIFIER; }
 
+>>>>>>> parent of 4cc7d20 (Runs)
 
 %%
 

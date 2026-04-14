@@ -194,13 +194,17 @@ stmt:
     |
     TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_CMP TOK_IDENTIFIER TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_UINT
     {
-        ParseTree *rOperand = reload($8);
+        char *ssaName = malloc(20);
+        sprintf(ssaName, "%d", $8);
+        ParseTree *rOperand = reload(ssaName);
         parserStackPush(parserStack, logicalNegation(rOperand));
     }
     |
     TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ZERO_EXTEND TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_TO TOK_TYPE
     {
-        ParseTree *rOperand = reload($7);
+        char *ssaName = malloc(20);
+        sprintf(ssaName, "%d", $7);
+        ParseTree *rOperand = reload(ssaName);
         parserStackPush(parserStack, declarationWithAssign(rOperand));
     }
     |

@@ -194,37 +194,67 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
         else if (unOpExpr->UnOpType == DECLASSIGN) {
             
             // TO DO
-            funcCode(prog, unOpExpr->rOperand, symbolTable);
-
-            while (funcCodeSymbolIndex < symbolTable->totalEntries &&
-                   strcmp(symbolTable[funcCodeSymbolIndex].entryType, "VAR"))
+            if (unOpExpr->rOperand->type == STRING) {
+        for (int x = 0; x < symbolTable->totalEntries; ++x)
+        {
+            if (!strcmp(symbolTable[x].symbolName, unOpExpr->rOperand->string))
             {
-                funcCodeSymbolIndex++;
+                char *reg = allocateNewRegister();
+                fprintf(prog, "    mov %s, [rbp-%d]\n", reg, symbolTable[x].symbolLocation);
+                fprintf(prog, "    mov edi, %s\n", reg);
+                break;
             }
+        }
+    }
+    else {
+        funcCode(prog, unOpExpr->rOperand, symbolTable);
+    }
 
-            if (funcCodeSymbolIndex < symbolTable->totalEntries) {
-                symbolTable[funcCodeSymbolIndex].symbolLocation = stackLocation * 4 + 4;
-                fprintf(prog, "    mov [rbp-%d], edi\n\n",
-                        symbolTable[funcCodeSymbolIndex].symbolLocation);
-                funcCodeSymbolIndex++;
-                stackLocation++;
-            }
+    while (funcCodeSymbolIndex < symbolTable->totalEntries &&
+           strcmp(symbolTable[funcCodeSymbolIndex].entryType, "VAR"))
+    {
+        funcCodeSymbolIndex++;
+    }
+
+    if (funcCodeSymbolIndex < symbolTable->totalEntries) {
+        symbolTable[funcCodeSymbolIndex].symbolLocation = stackLocation * 4 + 4;
+        fprintf(prog, "    mov [rbp-%d], edi\n\n",
+                symbolTable[funcCodeSymbolIndex].symbolLocation);
+        funcCodeSymbolIndex++;
+        stackLocation++;
+    }
         }
 
         else if (unOpExpr->UnOpType == STORETOSTACK) {
             
             // TO DO
-            funcCode(prog, unOpExpr->rOperand, symbolTable);
-            fprintf(prog, "    mov [rbp-%d], edi\n\n", stackLocation * 4 + 4);
-            stackLocation++;
+         funcCode(prog, unOpExpr->rOperand, symbolTable);
 
+    if (unOpExpr->rOperand->type == RELOAD || unOpExpr->rOperand->type == STRING) {
+        fprintf(prog, "    mov [rbp-%d], %s\n\n",
+                stackLocation * 4 + 4,
+                lastRegisterAllocated());
+    }
+    else {
+        fprintf(prog, "    mov [rbp-%d], edi\n\n", stackLocation * 4 + 4);
+    }
+
+    stackLocation++;
+        
+
+   
         }
 
         else if (unOpExpr->UnOpType == RET) {
             
             // TO DO
-            funcCode(prog, unOpExpr->rOperand, symbolTable);
-            returnValue(prog);
+             funcCode(prog, unOpExpr->rOperand, symbolTable);
+
+    if (unOpExpr->rOperand->type == RELOAD || unOpExpr->rOperand->type == STRING) {
+        fprintf(prog, "    mov edi, %s\n", lastRegisterAllocated());
+    }
+
+    returnValue(prog);
         }
 
 

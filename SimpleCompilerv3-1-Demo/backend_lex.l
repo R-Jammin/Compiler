@@ -26,6 +26,7 @@
 "to"            { return TOK_TO; }
 "align"         { return TOK_ALIGN; }
 "getelementptr" { return TOK_GETELEMENTPTR; }
+
 "eq"            { yylval.string = strdup(yytext); return TOK_IDENTIFIER; }
 "ne"            { yylval.string = strdup(yytext); return TOK_IDENTIFIER; }
 

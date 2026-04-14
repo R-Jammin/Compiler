@@ -148,7 +148,7 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable * symbolTable
 
         if (binOpExpr->BinOpType == ADDITION) {
 
-            fprintf(prog, "    adc %s, %s\n", secondToLastRegisterAllocated(), lastRegisterAllocated() );
+            fprintf(prog, "    add %s, %s\n", secondToLastRegisterAllocated(), lastRegisterAllocated() );
             fprintf(prog, "    mov [rbp-%d], %s\n", stackLocation *4 + 4, secondToLastRegisterAllocated());
             fprintf(prog, "    mov edi, %s\n\n", secondToLastRegisterAllocated() );
             fprintf(prog, "    mov %s, %s \n\n", lastRegisterAllocated(), secondToLastRegisterAllocated() );

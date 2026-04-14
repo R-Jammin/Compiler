@@ -30,6 +30,7 @@ int location = 0;
 void insertSymbol(struct SymbolTable *symbolTable, char *entryType, char *symbolType, char *symbolName, int symbolLocation, int size)
 {
     int entryNumber = symbolTable->totalEntries;
+
     strcpy(symbolTable[entryNumber].entryType, entryType);
     strcpy(symbolTable[entryNumber].symbolType, symbolType);
     strcpy(symbolTable[entryNumber].symbolName, symbolName);
@@ -65,6 +66,7 @@ int main(int argc, char *argv[])
     #endif
 
     yyin = fopen(argv[1], "r");
+
     parserStack = parserStackCreate();
     parserStackReversed = parserStackCreate();
 
@@ -133,7 +135,7 @@ program:
 function:
     function TOK_DEFINE TOK_TYPE TOK_GLOBAL TOK_IDENTIFIER TOK_LPAREN TOK_RPAREN TOK_LBRACE stmt_list TOK_RBRACE
     {
-        insertSymbol(symbolTable, (char *)"FUNC", (char *)$3, (char *)$5, ++location, 0);
+        insertSymbol(symbolTable, (char *)"FUNC", (char *)$3, (char *)$5, 0, 0);
         parserStackPush(parserStack, funcType($5));
     }
     |
@@ -144,7 +146,9 @@ stmt:
     {
         char *ssaName = malloc(20);
         sprintf(ssaName, "%d", $2);
-        insertSymbol(symbolTable, (char *)"VAR", (char *)$5, ssaName, ++location, 4);
+
+        location++;
+        insertSymbol(symbolTable, (char *)"VAR", (char *)$5, ssaName, location * 4 + 4, 4);
     }
     |
     TOK_STORE TOK_TYPE TOK_UINT TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
@@ -186,6 +190,18 @@ stmt:
     TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_MULTIPLY TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
     {
         parserStackPush(parserStack, multiply());
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_CMP TOK_IDENTIFIER TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_UINT
+    {
+        ParseTree *rOperand = reload($8);
+        parserStackPush(parserStack, logicalNegation(rOperand));
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ZERO_EXTEND TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_TO TOK_TYPE
+    {
+        ParseTree *rOperand = reload($7);
+        parserStackPush(parserStack, declarationWithAssign(rOperand));
     }
     |
     TOK_RETURN TOK_TYPE TOK_SSAINDEX TOK_UINT

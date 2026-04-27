@@ -165,9 +165,23 @@ stmt:
     |
     TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_GETELEMENTPTR TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_TYPE TOK_UINT
     {
-        char *ssaName = malloc(20);
-        sprintf(ssaName, "%d", $9);
-        parserStackPush(parserStack, stringType(ssaName));
+    char *resultName = malloc(20);
+    char *sourceName = malloc(20);
+    int sourceLocation = 0;
+
+    sprintf(resultName, "%d", $2);  // new SSA temp, like %5
+    sprintf(sourceName, "%d", $9);  // original variable, like %1
+
+    for (int x = 0; x < symbolTable->totalEntries; x++)
+    {
+        if (!strcmp(symbolTable[x].symbolName, sourceName))
+        {
+            sourceLocation = symbolTable[x].symbolLocation;
+            break;
+        }
+    }
+
+    insertSymbol(symbolTable, (char *)"PTR", (char *)$5, resultName, sourceLocation, 4);
     }
     |
     TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_LOAD TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
@@ -214,9 +228,9 @@ stmt:
         parserStackPush(parserStack, ret(rOperand));
     }
     |
-    TOK_RETURN TOK_TYPE TOK_UINT
+    TOK_RETURN TOK_TYPE expr
     {
-        ParseTree *rOperand = intType($3);
+        ParseTree *rOperand = parserStackPop(parserStack);
         parserStackPush(parserStack, ret(rOperand));
     }
     ;
@@ -227,6 +241,11 @@ stmt_list:
     stmt_list stmt
     ;
 
+/*
+ * Keep the professor's expression/value/number structure reachable by using
+ * expr for literal returns. Most backend instructions are still handled
+ * directly in stmt because this parser is reading LLVM-like IR.
+ */
 expr:
     value
     ;

@@ -80,7 +80,7 @@ ParseTree *add() {
 ParseTree *subtract() {
     
     ParseTree *parseTree = malloc(sizeof(ParseTree));
-    BinOpExpr *binOpExpr = malloc(sizeof(BinOpExpr));
+    BinOpExpr *binOpExpr = malloc(sizeof(_BITS_STDIO_LIM_H));
     binOpExpr->BinOpType = SUBTRACTION;
     parseTree->type = BINOP;
     parseTree->binExpr = binOpExpr;
@@ -90,7 +90,7 @@ ParseTree *subtract() {
 ParseTree *multiply() {
     
     ParseTree *parseTree = malloc(sizeof(ParseTree));
-    BinOpExpr *binOpExpr = malloc(sizeof(BinOpExpr));
+    BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
     binOpExpr->BinOpType = MULTIPLICATION;
     parseTree->type = BINOP;
     parseTree->binExpr = binOpExpr;
@@ -101,7 +101,7 @@ ParseTree *multiply() {
 ParseTree *logicalNegation(ParseTree *rint) {
     
     ParseTree *parseTree = malloc(sizeof(ParseTree));
-    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
     unOpExpr->UnOpType = LOGICALNEGATION;
     unOpExpr->rOperand = rint;
     parseTree->type = UNOP;
@@ -112,7 +112,7 @@ ParseTree *logicalNegation(ParseTree *rint) {
 ParseTree *declarationWithAssign(ParseTree *rint) {
     
     ParseTree *parseTree = malloc(sizeof(ParseTree));
-    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
     unOpExpr->UnOpType = DECLASSIGN;
     unOpExpr->rOperand = rint;
     parseTree->type = UNOP;
@@ -123,7 +123,7 @@ ParseTree *declarationWithAssign(ParseTree *rint) {
 ParseTree *storeToStack(ParseTree *rint) {
     
     ParseTree *parseTree = malloc(sizeof(ParseTree));
-    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
     unOpExpr->UnOpType = STORETOSTACK;
     unOpExpr->rOperand = rint;
     parseTree->type = UNOP;
@@ -134,7 +134,7 @@ ParseTree *storeToStack(ParseTree *rint) {
 ParseTree *ret(ParseTree *rint) {
     
     ParseTree *parseTree = malloc(sizeof(ParseTree));
-    UnOpExpr *unOpExpr = malloc(sizeof(UnOpExpr));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
     unOpExpr->UnOpType = RET;
     unOpExpr->rOperand = rint;
     parseTree->type = UNOP;

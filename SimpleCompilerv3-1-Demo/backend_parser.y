@@ -2,8 +2,9 @@
 // Copyright (c) 2023-2025 Dan O’Malley
 // This file is licensed under the MIT License. See LICENSE for details.
 
-
 #include "stdio.h"
+#include <stdlib.h>
+#include <string.h>
 #include "backend_parsetree.c"
 #include "backend_x64.c"
 #include "parserstack.h"
@@ -16,9 +17,8 @@ int yyparse();
 
 void yyerror(const char *str) {
     FILE *backend_parsing_error = fopen("./logs/backend_parsing_error.log", "wb");
-    fprintf (backend_parsing_error, "%s\n", str);
+    fprintf(backend_parsing_error, "%s\n", str);
 }
-
 
 extern FILE *yyin;
 ParserStack *parserStack;
@@ -27,10 +27,10 @@ ParseTree *parseTree;
 struct SymbolTable symbolTable[MAXSYMBOLS];
 int location = 0;
 
-
-void insertSymbol(struct SymbolTable * symbolTable, char * entryType, char * symbolType, char * symbolName, int symbolLocation, int size) 
+void insertSymbol(struct SymbolTable *symbolTable, char *entryType, char *symbolType, char *symbolName, int symbolLocation, int size)
 {
     int entryNumber = symbolTable->totalEntries;
+
     strcpy(symbolTable[entryNumber].entryType, entryType);
     strcpy(symbolTable[entryNumber].symbolType, symbolType);
     strcpy(symbolTable[entryNumber].symbolName, symbolName);
@@ -40,19 +40,20 @@ void insertSymbol(struct SymbolTable * symbolTable, char * entryType, char * sym
     symbolTable->totalEntries++;
 }
 
-void printSymbolTable(struct SymbolTable * symbolTable) 
+void printSymbolTable(struct SymbolTable *symbolTable)
 {
     printf("\n\n***** Symbol Table Dump *****\n");
 
-    for (int entryNumber = 0; entryNumber < symbolTable->totalEntries; entryNumber++) 
+    for (int entryNumber = 0; entryNumber < symbolTable->totalEntries; entryNumber++)
     {
-        printf("--> ID: %d ENTRY TYPE: %-5s NAME: %-15s TYPE: %-8s LOCATION: %-3d SIZE: %d\n", entryNumber, 
+        printf("--> ID: %d ENTRY TYPE: %-5s NAME: %-15s TYPE: %-8s LOCATION: %-3d SIZE: %d\n",
+            entryNumber,
             symbolTable[entryNumber].entryType,
-            symbolTable[entryNumber].symbolName, 
-            symbolTable[entryNumber].symbolType, 
+            symbolTable[entryNumber].symbolName,
+            symbolTable[entryNumber].symbolType,
             symbolTable[entryNumber].symbolLocation,
             symbolTable[entryNumber].size);
-}
+    }
 
     printf("\n\n");
 }
@@ -63,8 +64,9 @@ int main(int argc, char *argv[])
     extern int yydebug;
     yydebug = 1;
     #endif
-    
+
     yyin = fopen(argv[1], "r");
+
     parserStack = parserStackCreate();
     parserStackReversed = parserStackCreate();
 
@@ -74,10 +76,10 @@ int main(int argc, char *argv[])
 
     dataSectionHeader(prog);
     textSectionHeader(prog);
-    
-    for(int x = 0; x < symbolTable->totalEntries; ++x)
+
+    for (int x = 0; x < symbolTable->totalEntries; ++x)
     {
-        if(!strcmp(symbolTable[x].entryType, (char *)"FUNC"))
+        if (!strcmp(symbolTable[x].entryType, (char *)"FUNC"))
         {
             functionHeader(prog, symbolTable[x].symbolName);
             funcPrologue(prog, symbolTable);
@@ -89,10 +91,8 @@ int main(int argc, char *argv[])
         printf("parserstack depth: %d\n", parserStack->depth);
         parseTree = parserStackPop(parserStack);
         parserStackPush(parserStackReversed, parseTree);
-
     }
 
-    // I have to reverse the parsetree stack to get the codegen in the correct order
     while (parserStackReversed->depth > 0)
     {
         printf("parserstackReversed depth: %d\n", parserStackReversed->depth);
@@ -102,9 +102,7 @@ int main(int argc, char *argv[])
 
     printSymbolTable(symbolTable);
     fclose(prog);
-
 }
-
 %}
 
 %token TOK_GETELEMENTPTR
@@ -124,88 +122,147 @@ int main(int argc, char *argv[])
 }
 
 %token <number> TOK_UINT
-%token <string> TOK_TYPE 
+%token <string> TOK_TYPE
 %token <string> TOK_IDENTIFIER
 %token <string> TOK_IDENTIFIER_RELOAD
 
-
 %%
 
-// grammar rules or productions
+program:
+    function
+    ;
 
-program: 
-	function
-        ;
 function:
-        function TOK_DEFINE TOK_TYPE TOK_GLOBAL TOK_IDENTIFIER TOK_LPAREN TOK_RPAREN TOK_LBRACE stmt_list TOK_RBRACE
-        {
-            insertSymbol(symbolTable, (char *)"FUNC", (char *)$3, (char*)$5, ++location, 0);
-            parserStackPush(parserStack, funcType($5));
-        }
-        |
-        ;
-stmt:
-        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ALLOCA TOK_TYPE TOK_SEPARATOR TOK_ALIGN TOK_UINT
-        {
-            // I am recognizing this but ignoring
-            // NOTHING MORE TO DO WITH THIS RULE
+    function TOK_DEFINE TOK_TYPE TOK_GLOBAL TOK_IDENTIFIER TOK_LPAREN TOK_RPAREN TOK_LBRACE stmt_list TOK_RBRACE
+    {
+        insertSymbol(symbolTable, (char *)"FUNC", (char *)$3, (char *)$5, 0, 0);
+        parserStackPush(parserStack, funcType($5));
+    }
+    |
+    ;
 
-            // TO DO - THERE ARE MANY RULES BELOW THIS ONE TO IMPLEMENT
-            // FOR EXAMPLE, MY SOLUTION HAS 15 ADDITIONAL GRAMMAR RULES AFTER THIS ONE
-            // TO PROCESS ALL OF THE TEST CASES
-        }
-        |
-        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_GETELEMENTPTR TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_TYPE TOK_UINT
+stmt:
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ALLOCA TOK_TYPE TOK_SEPARATOR TOK_ALIGN TOK_UINT
+    {
+        char *ssaName = malloc(20);
+        sprintf(ssaName, "%d", $2);
+
+        location++;
+        insertSymbol(symbolTable, (char *)"VAR", (char *)$5, ssaName, location * 4 + 4, 4);
+    }
+    |
+    TOK_STORE TOK_TYPE TOK_UINT TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
+    {
+        ParseTree *rOperand = intType($3);
+        parserStackPush(parserStack, storeToStack(rOperand));
+    }
+    |
+    TOK_STORE TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
+    {
+        ParseTree *rOperand = parserStackPop(parserStack);
+        parserStackPush(parserStack, storeToStack(rOperand));
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_GETELEMENTPTR TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_TYPE TOK_UINT
+    {
+    char *resultName = malloc(20);
+    char *sourceName = malloc(20);
+    int sourceLocation = 0;
+
+    sprintf(resultName, "%d", $2);  // new SSA temp, like %5
+    sprintf(sourceName, "%d", $9);  // original variable, like %1
+
+    for (int x = 0; x < symbolTable->totalEntries; x++)
+    {
+        if (!strcmp(symbolTable[x].symbolName, sourceName))
         {
-            char *ssaName = malloc(20);
-            sprintf(ssaName, "%d", $9);
-            parserStackPush(parserStack, stringType(ssaName));
+            sourceLocation = symbolTable[x].symbolLocation;
+            break;
         }
-        |
-        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_LOAD TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
-        {
-            char *ssaName = malloc(20);
-            sprintf(ssaName, "%d", $9);
-            parserStackPush(parserStack, reload(ssaName));
-        }
-        |
-        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ADD TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
-        {
-            
-            parserStackPush(parserStack, add());
-        }
-        |
-        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_SUBTRACT TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
-        {
-            parserStackPush(parserStack, subtract());
-        }
-        |
-        TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_MULTIPLY TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
-        {
-            parserStackPush(parserStack, multiply());
-        }
-        ;
+    }
+
+    insertSymbol(symbolTable, (char *)"PTR", (char *)$5, resultName, sourceLocation, 4);
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_LOAD TOK_TYPE TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT
+    {
+        char *ssaName = malloc(20);
+        sprintf(ssaName, "%d", $9);
+        parserStackPush(parserStack, reload(ssaName));
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ADD TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
+    {
+        parserStackPush(parserStack, add());
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_SUBTRACT TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
+    {
+        parserStackPush(parserStack, subtract());
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_MULTIPLY TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_SSAINDEX TOK_UINT
+    {
+        parserStackPush(parserStack, multiply());
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_CMP TOK_IDENTIFIER TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_UINT
+    {
+        char *ssaName = malloc(20);
+        sprintf(ssaName, "%d", $8);
+        ParseTree *rOperand = reload(ssaName);
+        parserStackPush(parserStack, logicalNegation(rOperand));
+    }
+    |
+    TOK_SSAINDEX TOK_UINT TOK_EQUAL TOK_ZERO_EXTEND TOK_TYPE TOK_SSAINDEX TOK_UINT TOK_TO TOK_TYPE
+    {
+        char *ssaName = malloc(20);
+        sprintf(ssaName, "%d", $7);
+        ParseTree *rOperand = reload(ssaName);
+        parserStackPush(parserStack, declarationWithAssign(rOperand));
+    }
+    |
+    TOK_RETURN TOK_TYPE TOK_SSAINDEX TOK_UINT
+    {
+        ParseTree *rOperand = parserStackPop(parserStack);
+        parserStackPush(parserStack, ret(rOperand));
+    }
+    |
+    TOK_RETURN TOK_TYPE expr
+    {
+        ParseTree *rOperand = parserStackPop(parserStack);
+        parserStackPush(parserStack, ret(rOperand));
+    }
+    ;
+
 stmt_list:
-        stmt
-        |
-        stmt_list stmt
-        ;
+    stmt
+    |
+    stmt_list stmt
+    ;
+
+/*
+ * Keep the professor's expression/value/number structure reachable by using
+ * expr for literal returns. Most backend instructions are still handled
+ * directly in stmt because this parser is reading LLVM-like IR.
+ */
 expr:
-        value
-        ;
+    value
+    ;
+
 value:
-        TOK_IDENTIFIER
-        {
-            // TO DO
-            parserStackPush(parserStack, stringType($1));
-        }
-        |
-        number
-        ;
+    TOK_IDENTIFIER
+    {
+        parserStackPush(parserStack, stringType($1));
+    }
+    |
+    number
+    ;
+
 number:
-        TOK_UINT
-        {
-            printf("*******parser.y uint push value: %d\n", $1);
-            parserStackPush(parserStack, intType($1));
-        }
-        ;
+    TOK_UINT
+    {
+        printf("*******parser.y uint push value: %d\n", $1);
+        parserStackPush(parserStack, intType($1));
+    }
+    ;

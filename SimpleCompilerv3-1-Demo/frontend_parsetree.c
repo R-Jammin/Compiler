@@ -1,33 +1,52 @@
 // Copyright (c) 2023-2025 Dan O’Malley
 // This file is licensed under the MIT License. See LICENSE for details.
 
-
 #include <stdlib.h>
 #include <string.h>
 
 #ifndef COMPILER_PARSETREE
 #define COMPILER_PARSETREE
 
-typedef enum { FUNC, INT, STRING, BINOP, UNOP } ParseTreeType;
-typedef enum { ADDITION, SUBTRACTION, MULTIPLICATION } ParseTreeBinOp;
-typedef enum { LOGICALNEGATION, DECLASSIGN } ParseTreeUnOp;
+typedef enum
+{
+    FUNC,
+    INT,
+    STRING,
+    BINOP,
+    UNOP
+} ParseTreeType;
+typedef enum
+{
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION
+} ParseTreeBinOp;
+typedef enum
+{
+    LOGICALNEGATION,
+    DECLASSIGN
+} ParseTreeUnOp;
 
 typedef struct parseTree ParseTree;
 
-typedef struct BinOpExpr {
+typedef struct BinOpExpr
+{
     ParseTreeBinOp BinOpType;
     ParseTree *lOperand;
     ParseTree *rOperand;
 } BinOpExpr;
 
-typedef struct UnOpExpr {
+typedef struct UnOpExpr
+{
     ParseTreeUnOp UnOpType;
     ParseTree *rOperand;
 } UnOpExpr;
 
-struct parseTree {
+struct parseTree
+{
     ParseTreeType type;
-    union {
+    union
+    {
         int constantValue;
         char *string;
         BinOpExpr *binExpr;
@@ -35,24 +54,25 @@ struct parseTree {
     };
 };
 
-
-ParseTree *funcType(char *string) {
+ParseTree *funcType(char *string)
+{
     ParseTree *parseTree = malloc(sizeof(parseTree));
     parseTree->type = FUNC;
     parseTree->string = string;
     return parseTree;
 }
 
-
-ParseTree *intType(int constantValue) {
+ParseTree *intType(int constantValue)
+{
     ParseTree *parseTree = malloc(sizeof(parseTree));
     parseTree->type = INT;
     parseTree->constantValue = constantValue;
     return parseTree;
 }
 
-ParseTree *stringType(char *string) {
-    
+ParseTree *stringType(char *string)
+{
+
     // TO DO (and remove the "return 0;")
     ParseTree *parseTree = malloc(sizeof(parseTree));
     parseTree->type = STRING;
@@ -60,8 +80,8 @@ ParseTree *stringType(char *string) {
     return parseTree;
 }
 
-
-ParseTree *add(ParseTree *lOperand, ParseTree *rOperand) {
+ParseTree *add(ParseTree *lOperand, ParseTree *rOperand)
+{
     ParseTree *parseTree = malloc(sizeof(parseTree));
     BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
     binOpExpr->BinOpType = ADDITION;
@@ -72,8 +92,9 @@ ParseTree *add(ParseTree *lOperand, ParseTree *rOperand) {
     return parseTree;
 }
 
-ParseTree *subtract(ParseTree *lint, ParseTree *rint) {
-    
+ParseTree *subtract(ParseTree *lint, ParseTree *rint)
+{
+
     // TO DO (and remove the "return 0;")
     ParseTree *parseTree = malloc(sizeof(parseTree));
     BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
@@ -85,8 +106,9 @@ ParseTree *subtract(ParseTree *lint, ParseTree *rint) {
     return parseTree;
 }
 
-ParseTree *multiply(ParseTree *lint, ParseTree *rint) {
-    
+ParseTree *multiply(ParseTree *lint, ParseTree *rint)
+{
+
     // TO DO (and remove the "return 0;")
     ParseTree *parseTree = malloc(sizeof(parseTree));
     BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
@@ -98,7 +120,8 @@ ParseTree *multiply(ParseTree *lint, ParseTree *rint) {
     return parseTree;
 }
 
-ParseTree *logicalNegation(ParseTree *rint) {
+ParseTree *logicalNegation(ParseTree *rint)
+{
 
     // TO DO (and remove the "return 0;")
     ParseTree *parseTree = malloc(sizeof(parseTree));
@@ -110,10 +133,11 @@ ParseTree *logicalNegation(ParseTree *rint) {
     return parseTree;
 }
 
-ParseTree *declarationWithAssign(ParseTree *rint) {
+ParseTree *declarationWithAssign(ParseTree *rint)
+{
 
     // TO DO (and remove the "return 0;")
-     ParseTree *parseTree = malloc(sizeof(parseTree));
+    ParseTree *parseTree = malloc(sizeof(parseTree));
     UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
     unOpExpr->UnOpType = DECLASSIGN;
     unOpExpr->rOperand = rint;
@@ -121,6 +145,5 @@ ParseTree *declarationWithAssign(ParseTree *rint) {
     parseTree->unExpr = unOpExpr;
     return parseTree;
 }
-
 
 #endif

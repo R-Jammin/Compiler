@@ -148,7 +148,7 @@ stmt:
         sprintf(ssaName, "%d", $2);
 
         location++;
-        insertSymbol(symbolTable, (char *)"VAR", (char *)$5, ssaName, location * 4 + 4, 4);
+        insertSymbol(symbolTable, (char *)"VAR", (char *)$5, ssaName, location * 4, 4);
     }
     |
     TOK_STORE TOK_TYPE TOK_UINT TOK_SEPARATOR TOK_TYPE_PTR TOK_SSAINDEX TOK_UINT TOK_SEPARATOR TOK_ALIGN TOK_UINT

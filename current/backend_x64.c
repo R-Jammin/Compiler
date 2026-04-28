@@ -87,20 +87,26 @@ void functionHeader(FILE *prog, char *funcName)
 void funcPrologue(FILE *prog, struct SymbolTable *symbolTable)
 {
 
-    // Find the largest stack location in the symbol table
-    int stackLocation = 0;
+    int stackSpace = 0;
 
     for (int x = 0; x < symbolTable->totalEntries; ++x)
     {
-        stackLocation = symbolTable[x].symbolLocation;
+        if (!strcmp(symbolTable[x].entryType, "VAR") &&
+            symbolTable[x].symbolLocation > stackSpace)
+        {
+            stackSpace = symbolTable[x].symbolLocation;
+        }
     }
 
-    // prepare a dynamic stack frame
+    if (stackSpace % 16 != 0)
+    {
+        stackSpace += 16 - (stackSpace % 16);
+    }
+
     fprintf(prog, "    push rbp\n");
     fprintf(prog, "    mov rbp, rsp\n");
-    fprintf(prog, "    sub rsp, %d\n\n", (stackLocation * 4) - 4);
+    fprintf(prog, "    sub rsp, %d\n\n", stackSpace);
 }
-
 void returnValue(FILE *prog)
 {
     fprintf(prog, "    mov eax, edi\n");
@@ -152,30 +158,59 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable *symbolTable)
 
         if (binOpExpr->BinOpType == ADDITION)
         {
+            fprintf(prog, "    add %s, %s\n",
+                    secondToLastRegisterAllocated(),
+                    lastRegisterAllocated());
 
-            fprintf(prog, "    add %s, %s\n", secondToLastRegisterAllocated(), lastRegisterAllocated());
-            fprintf(prog, "    mov [rbp-%d], %s\n", stackLocation * 4 + 4, secondToLastRegisterAllocated());
-            fprintf(prog, "    mov edi, %s\n\n", secondToLastRegisterAllocated());
-            fprintf(prog, "    mov %s, %s \n\n", lastRegisterAllocated(), secondToLastRegisterAllocated());
+            fprintf(prog, "    mov [rbp-%d], %s\n",
+                    stackLocation * 4 + 4,
+                    secondToLastRegisterAllocated());
+
+            fprintf(prog, "    mov edi, %s\n\n",
+                    secondToLastRegisterAllocated());
+
+            fprintf(prog, "    mov %s, %s\n\n",
+                    lastRegisterAllocated(),
+                    secondToLastRegisterAllocated());
+
+            stackLocation++;
         }
         else if (binOpExpr->BinOpType == SUBTRACTION)
         {
+            fprintf(prog, "    sub %s, %s\n",
+                    secondToLastRegisterAllocated(),
+                    lastRegisterAllocated());
 
-            // TO DO
-            fprintf(prog, "    sub %s, %s\n", secondToLastRegisterAllocated(), lastRegisterAllocated());
-            fprintf(prog, "    mov [rbp-%d], %s\n", stackLocation * 4 + 4, secondToLastRegisterAllocated());
-            fprintf(prog, "    mov edi, %s\n\n", secondToLastRegisterAllocated());
-            fprintf(prog, "    mov %s, %s\n\n", lastRegisterAllocated(), secondToLastRegisterAllocated());
+            fprintf(prog, "    mov [rbp-%d], %s\n",
+                    stackLocation * 4 + 4,
+                    secondToLastRegisterAllocated());
+
+            fprintf(prog, "    mov edi, %s\n\n",
+                    secondToLastRegisterAllocated());
+
+            fprintf(prog, "    mov %s, %s\n\n",
+                    lastRegisterAllocated(),
+                    secondToLastRegisterAllocated());
+
             stackLocation++;
         }
         else if (binOpExpr->BinOpType == MULTIPLICATION)
         {
+            fprintf(prog, "    imul %s, %s\n",
+                    secondToLastRegisterAllocated(),
+                    lastRegisterAllocated());
 
-            // TO DO
-            fprintf(prog, "    imul %s, %s\n", secondToLastRegisterAllocated(), lastRegisterAllocated());
-            fprintf(prog, "    mov [rbp-%d], %s\n", stackLocation * 4 + 4, secondToLastRegisterAllocated());
-            fprintf(prog, "    mov edi, %s\n\n", secondToLastRegisterAllocated());
-            fprintf(prog, "    mov %s, %s\n\n", lastRegisterAllocated(), secondToLastRegisterAllocated());
+            fprintf(prog, "    mov [rbp-%d], %s\n",
+                    stackLocation * 4 + 4,
+                    secondToLastRegisterAllocated());
+
+            fprintf(prog, "    mov edi, %s\n\n",
+                    secondToLastRegisterAllocated());
+
+            fprintf(prog, "    mov %s, %s\n\n",
+                    lastRegisterAllocated(),
+                    secondToLastRegisterAllocated());
+
             stackLocation++;
         }
     }
@@ -265,16 +300,19 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable *symbolTable)
 
         else if (unOpExpr->UnOpType == RET)
         {
-
-            // TO DO
             funcCode(prog, unOpExpr->rOperand, symbolTable);
 
-            if (unOpExpr->rOperand->type == RELOAD || unOpExpr->rOperand->type == STRING)
+            if (unOpExpr->rOperand->type == RELOAD)
             {
-                fprintf(prog, "    mov edi, %s\n", lastRegisterAllocated());
+                fprintf(prog, "    mov eax, %s\n", lastRegisterAllocated());
+            }
+            else
+            {
+                fprintf(prog, "    mov eax, edi\n");
             }
 
-            returnValue(prog);
+            fprintf(prog, "    leave\n");
+            fprintf(prog, "    ret\n");
         }
     }
 }

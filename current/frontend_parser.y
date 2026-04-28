@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
 %token TOK_LBRACE TOK_RBRACE TOK_RETURN TOK_ADD
 %token TOK_LPAREN TOK_RPAREN TOK_SEMI TOK_EQUAL
 %token TOK_MUL TOK_SUB TOK_LOGICAL_NEGATION
+%token TOK_INCREMENT
 
 %union
 {
@@ -123,11 +124,12 @@ program:
 	function
         ;
 function:
-        function TOK_TYPE TOK_IDENTIFIER TOK_LPAREN TOK_RPAREN TOK_LBRACE stmt_list TOK_RBRACE
+        function TOK_TYPE TOK_IDENTIFIER TOK_LPAREN TOK_RPAREN TOK_LBRACE
         {
-            insertSymbol(symbolTable, (char *)"FUNC", (char *)$2, (char*)$3, ++location, 0);
+            insertSymbol(symbolTable, (char *)"FUNC", (char *)$2, (char *)$3, ++location, 0);
             parserStackPush(parserStack, funcType($3));
         }
+        stmt_list TOK_RBRACE
         |
         ;
 stmt:
@@ -136,18 +138,45 @@ stmt:
         expr TOK_SEMI
         |
         TOK_RETURN expr TOK_SEMI
-        |
-        TOK_TYPE TOK_IDENTIFIER TOK_EQUAL expr TOK_SEMI
         {
-            // TO DO
             ParseTree *rOperand = parserStackPop(parserStack);
 
+            /* Push it BACK so it's processed LAST */
+            parserStackPush(parserStackReversed, rOperand);
+        }
+        | 
+        TOK_TYPE TOK_IDENTIFIER TOK_SEMI
+        {
             insertSymbol(symbolTable, (char *)"VAR", (char *)$1, (char *)$2, ++location, 4);
-            
-
-            parserStackPush(parserStack, declarationWithAssign(rOperand));
+            parserStackPush(parserStack, declaration($2));
         }
         |
+        TOK_IDENTIFIER TOK_EQUAL expr TOK_SEMI
+        {
+            ParseTree *rOperand = parserStackPop(parserStack);
+            parserStackPush(parserStack, storeToVariable($1, rOperand));
+        }
+        |
+        TOK_IDENTIFIER TOK_INCREMENT TOK_SEMI
+        {
+            ParseTree *one = intType(1);
+            ParseTree *variable = stringType($1);
+            ParseTree *sum = add(variable, one);
+
+            parserStackPush(parserStack, storeToVariable($1, sum));
+        }
+        |
+        
+        TOK_TYPE TOK_IDENTIFIER TOK_EQUAL expr TOK_SEMI
+{
+    ParseTree *rOperand = parserStackPop(parserStack);
+
+    insertSymbol(symbolTable, (char *)"VAR", (char *)$1, (char *)$2, ++location, 4);
+
+    parserStackPush(parserStack, declaration($2));
+    parserStackPush(parserStack, storeToVariable($2, rOperand));
+}
+|
         TOK_LBRACE stmt_list TOK_RBRACE
         ;
 stmt_list:

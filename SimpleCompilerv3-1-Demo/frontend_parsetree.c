@@ -19,13 +19,16 @@ typedef enum
 {
     ADDITION,
     SUBTRACTION,
-    MULTIPLICATION
+    MULTIPLICATION,
+    ASSIGN
 } ParseTreeBinOp;
 typedef enum
 {
     LOGICALNEGATION,
-    DECLASSIGN
+    DECLASSIGN,
+    DECL
 } ParseTreeUnOp;
+
 
 typedef struct parseTree ParseTree;
 
@@ -105,6 +108,20 @@ ParseTree *subtract(ParseTree *lint, ParseTree *rint)
     parseTree->binExpr = binOpExpr;
     return parseTree;
 }
+ParseTree *storeToVariable(char *identifier, ParseTree *rOperand)
+{
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
+
+    binOpExpr->BinOpType = ASSIGN;
+    binOpExpr->lOperand = stringType(identifier);
+    binOpExpr->rOperand = rOperand;
+
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+
+    return parseTree;
+}
 
 ParseTree *multiply(ParseTree *lint, ParseTree *rint)
 {
@@ -132,17 +149,31 @@ ParseTree *logicalNegation(ParseTree *rint)
     parseTree->unExpr = unOpExpr;
     return parseTree;
 }
-
-ParseTree *declarationWithAssign(ParseTree *rint)
+ParseTree *declaration(char *identifier)
 {
-
-    // TO DO (and remove the "return 0;")
     ParseTree *parseTree = malloc(sizeof(parseTree));
     UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
-    unOpExpr->UnOpType = DECLASSIGN;
-    unOpExpr->rOperand = rint;
+
+    unOpExpr->UnOpType = DECL;
+    unOpExpr->rOperand = stringType(identifier);
+
     parseTree->type = UNOP;
     parseTree->unExpr = unOpExpr;
+
+    return parseTree;
+}
+ParseTree *declarationWithAssign(char *identifier, ParseTree *rint)
+{
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
+
+    binOpExpr->BinOpType = ASSIGN;
+    binOpExpr->lOperand = stringType(identifier);
+    binOpExpr->rOperand = rint;
+
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+
     return parseTree;
 }
 

@@ -19,6 +19,7 @@
 "}"           { return TOK_RBRACE; }
 "("           { return TOK_LPAREN; }
 ")"           { return TOK_RPAREN; }
+"++"          { return TOK_INCREMENT; }
 "+"           { return TOK_ADD; }
 "-"           { return TOK_SUB; }
 "*"           { return TOK_MUL; }

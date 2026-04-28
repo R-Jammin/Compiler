@@ -14,6 +14,15 @@ do
     tests_performed=$((tests_performed+1))
 done
 
+for FILE in ./test-cases/pass-int/test-case-*.c
+do
+    make prog=$FILE type=pass-int
+    read -n 1 -s -r -p "Press any key to continue"
+    make clean
+    tests_performed=$((tests_performed+1))
+done
+
+
 echo
 echo
 echo " Tests performed: $tests_performed "

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Progress Bar code modified from: https://www.baeldung.com/linux/command-line-progress-bar
-# Parallel code written by Grok (xAI).
+# Parallel code written by Grok (xAI)
 # 12/2025 with Grok v4.
 
 # Needs sudo apt install parallel
@@ -41,7 +41,7 @@ function run_test {
     tmpdir=$(mktemp -d /tmp/compiler-test.XXXXXX)
     trap "rm -rf '$tmpdir'" EXIT
 
-    cp Makefile frontend_lex.l frontend_parser.y parserstack.c parserstack.h frontend_parsetree.c frontend_ir.c symboltable.h "$tmpdir"
+    cp Makefile frontend_lex.l frontend_parser.y parserstack.c parserstack.h backend_lex.l backend_parser.y frontend_parsetree.c backend_parsetree.c frontend_ir.c symboltable.h backend_x64.c "$tmpdir"
     # If gdb_script.txt exists and is needed, uncomment the following:
     # [ -f gdb_script.txt ] && cp gdb_script.txt "$tmpdir"
 
@@ -73,12 +73,15 @@ function run_test {
 set -e
 
 mapfile -t return_int_files < <(find "./test-cases/return-int/" -type f -name "test-case-*.c")
+mapfile -t pass_int_files < <(find "./test-cases/pass-int/" -type f -name "test-case-*.c")
 
 return_int_count=${#return_int_files[@]}
-total_test_case_count=$((return_int_count))
+pass_int_count=${#pass_int_files[@]}
+total_test_case_count=$((return_int_count + pass_int_count))
 
 all_tests=()
 for f in "${return_int_files[@]}"; do all_tests+=("$f return-int"); done
+for f in "${pass_int_files[@]}"; do all_tests+=("$f pass-int"); done
 
 export -f run_test
 printf "%s\n" "${all_tests[@]}" | parallel --colsep ' ' --bar --halt now,fail=1 -j8 run_test {1} {2}

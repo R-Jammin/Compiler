@@ -84,23 +84,28 @@ void functionHeader(FILE *prog, char *funcName)
     fprintf(prog, "%sFinal:\n", funcName);
 }
 
-void funcPrologue(FILE *prog, struct SymbolTable *symbolTable)
-{
+void funcPrologue(FILE *prog, struct SymbolTable * symbolTable) {
 
-    // Find the largest stack location in the symbol table
-    int stackLocation = 0;
+    int stackSpace = 0;
 
     for (int x = 0; x < symbolTable->totalEntries; ++x)
     {
-        stackLocation = symbolTable[x].symbolLocation;
+        if (!strcmp(symbolTable[x].entryType, "VAR") &&
+            symbolTable[x].symbolLocation > stackSpace)
+        {
+            stackSpace = symbolTable[x].symbolLocation;
+        }
     }
 
-    // prepare a dynamic stack frame
+    if (stackSpace % 16 != 0)
+    {
+        stackSpace += 16 - (stackSpace % 16);
+    }
+
     fprintf(prog, "    push rbp\n");
     fprintf(prog, "    mov rbp, rsp\n");
-    fprintf(prog, "    sub rsp, %d\n\n", (stackLocation * 4) - 4);
+    fprintf(prog, "    sub rsp, %d\n\n", stackSpace);
 }
-
 void returnValue(FILE *prog)
 {
     fprintf(prog, "    mov eax, edi\n");

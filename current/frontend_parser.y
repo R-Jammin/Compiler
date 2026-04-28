@@ -138,9 +138,12 @@ stmt:
         expr TOK_SEMI
         |
         TOK_RETURN expr TOK_SEMI
-{
-    ParseTree *rOperand = parserStackPop(parserStack);
-}
+        {
+            ParseTree *rOperand = parserStackPop(parserStack);
+
+            /* Push it BACK so it's processed LAST */
+            parserStackPush(parserStackReversed, rOperand);
+        }
         | 
         TOK_TYPE TOK_IDENTIFIER TOK_SEMI
         {

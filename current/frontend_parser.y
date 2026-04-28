@@ -103,8 +103,10 @@ int main(int argc, char *argv[])
 
 %token TOK_LBRACE TOK_RBRACE TOK_RETURN TOK_ADD
 %token TOK_LPAREN TOK_RPAREN TOK_SEMI TOK_EQUAL
-%token TOK_MUL TOK_SUB TOK_LOGICAL_NEGATION
-%token TOK_INCREMENT
+%token TOK_MUL TOK_SUB TOK_LOGICAL_NEGATION 
+%token TOK_INCREMENT TOK_DO TOK_WHILE
+%token TOK_LESS_THAN
+
 
 %union
 {
@@ -166,6 +168,14 @@ stmt:
             parserStackPush(parserStack, storeToVariable($1, sum));
         }
         |
+TOK_DO stmt TOK_WHILE TOK_LPAREN expr TOK_RPAREN TOK_SEMI
+{
+    ParseTree *condition = parserStackPop(parserStack);
+    ParseTree *body = parserStackPop(parserStack);
+
+    parserStackPush(parserStack, doWhileLoop(body, condition));
+}
+        |
         
         TOK_TYPE TOK_IDENTIFIER TOK_EQUAL expr TOK_SEMI
 {
@@ -207,6 +217,13 @@ expr:
             ParseTree *rOperand = parserStackPop(parserStack);
             parserStackPush(parserStack, multiply(lOperand, rOperand));
         }
+        |
+value TOK_LESS_THAN expr
+{
+    ParseTree *lOperand = parserStackPop(parserStack);
+    ParseTree *rOperand = parserStackPop(parserStack);
+    parserStackPush(parserStack, lessThan(lOperand, rOperand));
+}
         |
         TOK_LOGICAL_NEGATION expr
         {

@@ -13,14 +13,16 @@ typedef enum
     INT,
     STRING,
     BINOP,
-    UNOP
+    UNOP, 
+    DOWHILE
 } ParseTreeType;
 typedef enum
 {
     ADDITION,
     SUBTRACTION,
     MULTIPLICATION,
-    ASSIGN
+    ASSIGN, 
+    LESSTHAN
 } ParseTreeBinOp;
 typedef enum
 {
@@ -44,6 +46,11 @@ typedef struct UnOpExpr
     ParseTreeUnOp UnOpType;
     ParseTree *rOperand;
 } UnOpExpr;
+typedef struct DoWhileExpr
+{
+    ParseTree *body;
+    ParseTree *condition;
+} DoWhileExpr;
 
 struct parseTree
 {
@@ -54,6 +61,7 @@ struct parseTree
         char *string;
         BinOpExpr *binExpr;
         UnOpExpr *unExpr;
+        DoWhileExpr *doWhileExpr;
     };
 };
 
@@ -136,6 +144,20 @@ ParseTree *multiply(ParseTree *lint, ParseTree *rint)
     parseTree->binExpr = binOpExpr;
     return parseTree;
 }
+ParseTree *lessThan(ParseTree *lOperand, ParseTree *rOperand)
+{
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(BinOpExpr));
+
+    binOpExpr->BinOpType = LESSTHAN;
+    binOpExpr->lOperand = lOperand;
+    binOpExpr->rOperand = rOperand;
+
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+
+    return parseTree;
+}
 
 ParseTree *logicalNegation(ParseTree *rint)
 {
@@ -177,4 +199,17 @@ ParseTree *declarationWithAssign(char *identifier, ParseTree *rint)
     return parseTree;
 }
 
+ParseTree *doWhileLoop(ParseTree *body, ParseTree *condition)
+{
+    ParseTree *parseTree = malloc(sizeof(ParseTree));
+    DoWhileExpr *doWhileExpr = malloc(sizeof(DoWhileExpr));
+
+    doWhileExpr->body = body;
+    doWhileExpr->condition = condition;
+
+    parseTree->type = DOWHILE;
+    parseTree->doWhileExpr = doWhileExpr;
+
+    return parseTree;
+}
 #endif

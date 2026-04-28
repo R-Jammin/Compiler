@@ -8,6 +8,7 @@
 
 int funcCodeSymbolIndex = 0;
 int ssaIndex = 1;
+int labelIndex = 0;
 
 void returnValue(FILE *prog)
 {
@@ -123,6 +124,36 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable *symbolTable)
             ssaIndex++;
             fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
             fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4 ; storing the answer\n\n", ssaIndex - 1, ssaIndex);
+            ssaIndex++;
+        }
+        else if (binOpExpr->BinOpType == LESSTHAN)
+        {
+            funcCode(prog, binOpExpr->rOperand, symbolTable);
+            funcCode(prog, binOpExpr->lOperand, symbolTable);
+
+            fprintf(prog, "    ; loading values for less than comparison\n\n");
+
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
+                    ssaIndex, ssaIndex - 2);
+            ssaIndex++;
+
+            fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
+                    ssaIndex, ssaIndex - 2);
+            ssaIndex++;
+
+            fprintf(prog, "    %%%d = icmp slt i32 %%%d, %%%d\n",
+                    ssaIndex, ssaIndex - 2, ssaIndex - 1);
+            ssaIndex++;
+
+            fprintf(prog, "    %%%d = zext i1 %%%d to i32\n",
+                    ssaIndex, ssaIndex - 1);
+            ssaIndex++;
+
+            fprintf(prog, "    %%%d = alloca i32, align 4\n", ssaIndex);
+
+            fprintf(prog, "    store i32 %%%d, i32* %%%d, align 4\n\n",
+                    ssaIndex - 1, ssaIndex);
+
             ssaIndex++;
         }
         if (binOpExpr->BinOpType == ASSIGN)
@@ -250,4 +281,31 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable *symbolTable)
             funcCodeSymbolIndex++;
         }
     }
+    else if (parseTree->type == DOWHILE)
+    {
+        int doBodyLabel = labelIndex++;
+        int doEndLabel = labelIndex++;
+
+        fprintf(prog, "    br label %%do_body_%d\n\n", doBodyLabel);
+
+        fprintf(prog, "do_body_%d:\n", doBodyLabel);
+
+        funcCode(prog, parseTree->doWhileExpr->body, symbolTable);
+
+        funcCode(prog, parseTree->doWhileExpr->condition, symbolTable);
+
+        fprintf(prog, "    %%%d = load i32, i32* %%%d, align 4\n",
+                ssaIndex, ssaIndex - 1);
+        ssaIndex++;
+
+        fprintf(prog, "    %%%d = icmp ne i32 %%%d, 0\n",
+                ssaIndex, ssaIndex - 1);
+        ssaIndex++;
+
+        fprintf(prog, "    br i1 %%%d, label %%do_body_%d, label %%do_end_%d\n\n",
+                ssaIndex - 1, doBodyLabel, doEndLabel);
+
+        fprintf(prog, "do_end_%d:\n", doEndLabel);
+    }
+    
 }

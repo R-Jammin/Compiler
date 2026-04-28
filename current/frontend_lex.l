@@ -14,6 +14,8 @@
 
 
 "return"      { return TOK_RETURN; }
+"do"      	  {return TOK_DO;}
+"while"   	  {return TOK_WHILE;}
 "int"         { yylval.string=strdup(yytext); return TOK_TYPE; }
 "{"           { return TOK_LBRACE; }
 "}"           { return TOK_RBRACE; }
@@ -24,6 +26,8 @@
 "-"           { return TOK_SUB; }
 "*"           { return TOK_MUL; }
 "!"			  { return TOK_LOGICAL_NEGATION;}
+"<"			  { return TOK_LESS_THAN;}
+
 
 
 ";"           { return TOK_SEMI; }

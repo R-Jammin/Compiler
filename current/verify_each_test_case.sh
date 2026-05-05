@@ -6,7 +6,7 @@
 
 set -e
 
-for FILE in ./test-cases/return-int/test-case-*.c
+for FILE in ./test-cases/x64/return-int/test-case-*.c
 do
     make prog=$FILE type=return-int
     read -n 1 -s -r -p "Press any key to continue"
@@ -14,7 +14,7 @@ do
     tests_performed=$((tests_performed+1))
 done
 
-for FILE in ./test-cases/pass-int/test-case-*.c
+for FILE in ./test-cases/x64/pass-int/test-case-*.c
 do
     make prog=$FILE type=pass-int
     read -n 1 -s -r -p "Press any key to continue"

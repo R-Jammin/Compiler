@@ -1,4 +1,5 @@
 int myFunction() 
 {
-   return 10 + 2;
+   int x = 10 + 2;
+   return x;
 }

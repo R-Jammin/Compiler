@@ -15,18 +15,20 @@ typedef enum
     BINOP,
     UNOP
 } ParseTreeType;
-typedef enum
-{
+typedef enum {
     ADDITION,
     SUBTRACTION,
     MULTIPLICATION,
-    ASSIGN
+    ASSIGN,
+    LESSTHAN
 } ParseTreeBinOp;
 typedef enum
 {
     LOGICALNEGATION,
     DECLASSIGN,
-    DECL
+    DECL,
+    RET,
+    DOWHILE
 } ParseTreeUnOp;
 
 
@@ -176,5 +178,44 @@ ParseTree *declarationWithAssign(char *identifier, ParseTree *rint)
 
     return parseTree;
 }
+ParseTree *lessThan(ParseTree *left, ParseTree *right)
+{
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    BinOpExpr *binOpExpr = malloc(sizeof(binOpExpr));
 
+    binOpExpr->BinOpType = LESSTHAN;
+    binOpExpr->lOperand = left;
+    binOpExpr->rOperand = right;
+
+    parseTree->type = BINOP;
+    parseTree->binExpr = binOpExpr;
+
+    return parseTree;
+}
+ParseTree *doWhile(ParseTree *condition)
+{
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
+
+    unOpExpr->UnOpType = DOWHILE;
+    unOpExpr->rOperand = condition;
+
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+
+    return parseTree;
+}
+ParseTree *ret(ParseTree *rint)
+{
+    ParseTree *parseTree = malloc(sizeof(parseTree));
+    UnOpExpr *unOpExpr = malloc(sizeof(unOpExpr));
+
+    unOpExpr->UnOpType = RET;
+    unOpExpr->rOperand = rint;
+
+    parseTree->type = UNOP;
+    parseTree->unExpr = unOpExpr;
+
+    return parseTree;
+}
 #endif

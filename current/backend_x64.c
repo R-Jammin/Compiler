@@ -226,11 +226,26 @@ void funcCode(FILE *prog, ParseTree *parseTree, struct SymbolTable *symbolTable)
 
             if (unOpExpr->rOperand->type == RELOAD)
             {
-                fprintf(prog, "    cmp %s, 0\n", lastRegisterAllocated());
+                fprintf(prog, "    mov eax, %s\n", lastRegisterAllocated());
             }
-            else
+            else if (unOpExpr->rOperand->type == INT)
             {
-                fprintf(prog, "    cmp edi, 0\n");
+                fprintf(prog, "    mov eax, %d\n",
+                        unOpExpr->rOperand->constantValue);
+            }
+            else if (unOpExpr->rOperand->type == STRING)
+            {
+                for (int x = 0; x < symbolTable->totalEntries; ++x)
+                {
+                    if (!strcmp(symbolTable[x].symbolName,
+                                unOpExpr->rOperand->string))
+                    {
+                        fprintf(prog,
+                                "    mov eax, [rbp-%d]\n",
+                                symbolTable[x].symbolLocation);
+                        break;
+                    }
+                }
             }
 
             fprintf(prog, "    sete al\n");

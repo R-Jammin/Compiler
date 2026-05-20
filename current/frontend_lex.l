@@ -13,6 +13,10 @@
 [ \t\n]+      { /* consume whitespace characters */ }
 
 
+"do"        { return TOK_DO; }
+"while"     { return TOK_WHILE; }
+"<"         { return TOK_LESS_THAN; }
+
 "return"      { return TOK_RETURN; }
 "int"         { yylval.string=strdup(yytext); return TOK_TYPE; }
 "{"           { return TOK_LBRACE; }

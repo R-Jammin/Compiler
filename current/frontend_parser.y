@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 %token TOK_LPAREN TOK_RPAREN TOK_SEMI TOK_EQUAL
 %token TOK_MUL TOK_SUB TOK_LOGICAL_NEGATION
 %token TOK_INCREMENT
+%token TOK_DO TOK_WHILE TOK_LESS_THAN
 
 %union
 {
@@ -140,11 +141,9 @@ stmt:
         TOK_RETURN expr TOK_SEMI
         {
             ParseTree *rOperand = parserStackPop(parserStack);
-
-            /* Push it BACK so it's processed LAST */
-            parserStackPush(parserStackReversed, rOperand);
+            parserStackPush(parserStack, ret(rOperand));
         }
-        | 
+        |
         TOK_TYPE TOK_IDENTIFIER TOK_SEMI
         {
             insertSymbol(symbolTable, (char *)"VAR", (char *)$1, (char *)$2, ++location, 4);
@@ -166,17 +165,32 @@ stmt:
             parserStackPush(parserStack, storeToVariable($1, sum));
         }
         |
-        
         TOK_TYPE TOK_IDENTIFIER TOK_EQUAL expr TOK_SEMI
-{
-    ParseTree *rOperand = parserStackPop(parserStack);
+        {
+            ParseTree *rOperand = parserStackPop(parserStack);
 
-    insertSymbol(symbolTable, (char *)"VAR", (char *)$1, (char *)$2, ++location, 4);
+            insertSymbol(symbolTable,
+                         (char *)"VAR",
+                         (char *)$1,
+                         (char *)$2,
+                         ++location,
+                         4);
 
-    parserStackPush(parserStack, declaration($2));
-    parserStackPush(parserStack, storeToVariable($2, rOperand));
-}
-|
+            parserStackPush(parserStack, declaration($2));
+            parserStackPush(parserStack, storeToVariable($2, rOperand));
+        }
+        |
+        TOK_DO TOK_LBRACE stmt_list TOK_RBRACE
+        TOK_WHILE TOK_LPAREN expr TOK_LESS_THAN expr TOK_RPAREN TOK_SEMI
+        {
+            ParseTree *right = parserStackPop(parserStack);
+            ParseTree *left = parserStackPop(parserStack);
+
+            ParseTree *condition = lessThan(left, right);
+
+            parserStackPush(parserStack, doWhile(condition));
+        }
+        |
         TOK_LBRACE stmt_list TOK_RBRACE
         ;
 stmt_list:

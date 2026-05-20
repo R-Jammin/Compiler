@@ -25,7 +25,7 @@ ParserStack *parserStack;
 ParserStack *parserStackReversed;
 ParseTree *parseTree;
 struct SymbolTable symbolTable[MAXSYMBOLS];
-int location = 0;
+int location = 1;
 
 void insertSymbol(struct SymbolTable *symbolTable, char *entryType, char *symbolType, char *symbolName, int symbolLocation, int size)
 {
@@ -223,11 +223,14 @@ stmt:
     }
     |
     TOK_RETURN TOK_TYPE TOK_SSAINDEX TOK_UINT
-    {
-        ParseTree *rOperand = parserStackPop(parserStack);
-        parserStackPush(parserStack, ret(rOperand));
-    }
-    |
+{
+    char *ssaName = malloc(20);
+    sprintf(ssaName, "%d", $4);
+
+    ParseTree *rOperand = reload(ssaName);
+    parserStackPush(parserStack, ret(rOperand));
+}
+|
     TOK_RETURN TOK_TYPE expr
     {
         ParseTree *rOperand = parserStackPop(parserStack);

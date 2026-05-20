@@ -1,0 +1,760 @@
+Starting parse
+Entering state 0
+Stack now 0
+Reducing stack by rule 3 (line 141):
+-> $$ = nterm function ()
+Entering state 2
+Stack now 0 2
+Reading a token
+Next token is token TOK_DEFINE ()
+Shifting token TOK_DEFINE ()
+Entering state 4
+Stack now 0 2 4
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 5
+Stack now 0 2 4 5
+Reading a token
+Next token is token TOK_GLOBAL ()
+Shifting token TOK_GLOBAL ()
+Entering state 6
+Stack now 0 2 4 5 6
+Reading a token
+Next token is token TOK_IDENTIFIER ()
+Shifting token TOK_IDENTIFIER ()
+Entering state 7
+Stack now 0 2 4 5 6 7
+Reading a token
+Next token is token TOK_LPAREN ()
+Shifting token TOK_LPAREN ()
+Entering state 8
+Stack now 0 2 4 5 6 7 8
+Reading a token
+Next token is token TOK_RPAREN ()
+Shifting token TOK_RPAREN ()
+Entering state 9
+Stack now 0 2 4 5 6 7 8 9
+Reading a token
+Next token is token TOK_LBRACE ()
+Shifting token TOK_LBRACE ()
+Entering state 10
+Stack now 0 2 4 5 6 7 8 9 10
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 11
+Stack now 0 2 4 5 6 7 8 9 10 11
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 16
+Stack now 0 2 4 5 6 7 8 9 10 11 16
+Reading a token
+Next token is token TOK_EQUAL ()
+Shifting token TOK_EQUAL ()
+Entering state 21
+Stack now 0 2 4 5 6 7 8 9 10 11 16 21
+Reading a token
+Next token is token TOK_ALLOCA ()
+Shifting token TOK_ALLOCA ()
+Entering state 31
+Stack now 0 2 4 5 6 7 8 9 10 11 16 21 31
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 42
+Stack now 0 2 4 5 6 7 8 9 10 11 16 21 31 42
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 52
+Stack now 0 2 4 5 6 7 8 9 10 11 16 21 31 42 52
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 62
+Stack now 0 2 4 5 6 7 8 9 10 11 16 21 31 42 52 62
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 72
+Stack now 0 2 4 5 6 7 8 9 10 11 16 21 31 42 52 62 72
+Reducing stack by rule 4 (line 145):
+   $1 = token TOK_SSAINDEX ()
+   $2 = token TOK_UINT ()
+   $3 = token TOK_EQUAL ()
+   $4 = token TOK_ALLOCA ()
+   $5 = token TOK_TYPE ()
+   $6 = token TOK_SEPARATOR ()
+   $7 = token TOK_ALIGN ()
+   $8 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 14
+Stack now 0 2 4 5 6 7 8 9 10 14
+Reducing stack by rule 16 (line 239):
+   $1 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_STORE ()
+Shifting token TOK_STORE ()
+Entering state 13
+Stack now 0 2 4 5 6 7 8 9 10 15 13
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 18
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 29
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 40
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40
+Reading a token
+Next token is token TOK_TYPE_PTR ()
+Shifting token TOK_TYPE_PTR ()
+Entering state 50
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 60
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 70
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 80
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 89
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 97
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89 97
+Reducing stack by rule 5 (line 154):
+   $1 = token TOK_STORE ()
+   $2 = token TOK_TYPE ()
+   $3 = token TOK_UINT ()
+   $4 = token TOK_SEPARATOR ()
+   $5 = token TOK_TYPE_PTR ()
+   $6 = token TOK_SSAINDEX ()
+   $7 = token TOK_UINT ()
+   $8 = token TOK_SEPARATOR ()
+   $9 = token TOK_ALIGN ()
+   $10 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 11
+Stack now 0 2 4 5 6 7 8 9 10 15 11
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 16
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16
+Reading a token
+Next token is token TOK_EQUAL ()
+Shifting token TOK_EQUAL ()
+Entering state 21
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21
+Reading a token
+Next token is token TOK_ALLOCA ()
+Shifting token TOK_ALLOCA ()
+Entering state 31
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 42
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 52
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 62
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 72
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62 72
+Reducing stack by rule 4 (line 145):
+   $1 = token TOK_SSAINDEX ()
+   $2 = token TOK_UINT ()
+   $3 = token TOK_EQUAL ()
+   $4 = token TOK_ALLOCA ()
+   $5 = token TOK_TYPE ()
+   $6 = token TOK_SEPARATOR ()
+   $7 = token TOK_ALIGN ()
+   $8 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_STORE ()
+Shifting token TOK_STORE ()
+Entering state 13
+Stack now 0 2 4 5 6 7 8 9 10 15 13
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 18
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 29
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 40
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40
+Reading a token
+Next token is token TOK_TYPE_PTR ()
+Shifting token TOK_TYPE_PTR ()
+Entering state 50
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 60
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 70
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 80
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 89
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 97
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89 97
+Reducing stack by rule 5 (line 154):
+   $1 = token TOK_STORE ()
+   $2 = token TOK_TYPE ()
+   $3 = token TOK_UINT ()
+   $4 = token TOK_SEPARATOR ()
+   $5 = token TOK_TYPE_PTR ()
+   $6 = token TOK_SSAINDEX ()
+   $7 = token TOK_UINT ()
+   $8 = token TOK_SEPARATOR ()
+   $9 = token TOK_ALIGN ()
+   $10 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 11
+Stack now 0 2 4 5 6 7 8 9 10 15 11
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 16
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16
+Reading a token
+Next token is token TOK_EQUAL ()
+Shifting token TOK_EQUAL ()
+Entering state 21
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21
+Reading a token
+Next token is token TOK_ALLOCA ()
+Shifting token TOK_ALLOCA ()
+Entering state 31
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 42
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 52
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 62
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 72
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62 72
+Reducing stack by rule 4 (line 145):
+   $1 = token TOK_SSAINDEX ()
+   $2 = token TOK_UINT ()
+   $3 = token TOK_EQUAL ()
+   $4 = token TOK_ALLOCA ()
+   $5 = token TOK_TYPE ()
+   $6 = token TOK_SEPARATOR ()
+   $7 = token TOK_ALIGN ()
+   $8 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 11
+Stack now 0 2 4 5 6 7 8 9 10 15 11
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 16
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16
+Reading a token
+Next token is token TOK_EQUAL ()
+Shifting token TOK_EQUAL ()
+Entering state 21
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21
+Reading a token
+Next token is token TOK_ALLOCA ()
+Shifting token TOK_ALLOCA ()
+Entering state 31
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 42
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 52
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 62
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 72
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62 72
+Reducing stack by rule 4 (line 145):
+   $1 = token TOK_SSAINDEX ()
+   $2 = token TOK_UINT ()
+   $3 = token TOK_EQUAL ()
+   $4 = token TOK_ALLOCA ()
+   $5 = token TOK_TYPE ()
+   $6 = token TOK_SEPARATOR ()
+   $7 = token TOK_ALIGN ()
+   $8 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 11
+Stack now 0 2 4 5 6 7 8 9 10 15 11
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 16
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16
+Reading a token
+Next token is token TOK_EQUAL ()
+Shifting token TOK_EQUAL ()
+Entering state 21
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21
+Reading a token
+Next token is token TOK_ALLOCA ()
+Shifting token TOK_ALLOCA ()
+Entering state 31
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 42
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 52
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 62
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 72
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 31 42 52 62 72
+Reducing stack by rule 4 (line 145):
+   $1 = token TOK_SSAINDEX ()
+   $2 = token TOK_UINT ()
+   $3 = token TOK_EQUAL ()
+   $4 = token TOK_ALLOCA ()
+   $5 = token TOK_TYPE ()
+   $6 = token TOK_SEPARATOR ()
+   $7 = token TOK_ALIGN ()
+   $8 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_STORE ()
+Shifting token TOK_STORE ()
+Entering state 13
+Stack now 0 2 4 5 6 7 8 9 10 15 13
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 18
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 29
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 40
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40
+Reading a token
+Next token is token TOK_TYPE_PTR ()
+Shifting token TOK_TYPE_PTR ()
+Entering state 50
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 60
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 70
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 80
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 89
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 97
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89 97
+Reducing stack by rule 5 (line 154):
+   $1 = token TOK_STORE ()
+   $2 = token TOK_TYPE ()
+   $3 = token TOK_UINT ()
+   $4 = token TOK_SEPARATOR ()
+   $5 = token TOK_TYPE_PTR ()
+   $6 = token TOK_SSAINDEX ()
+   $7 = token TOK_UINT ()
+   $8 = token TOK_SEPARATOR ()
+   $9 = token TOK_ALIGN ()
+   $10 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_STORE ()
+Shifting token TOK_STORE ()
+Entering state 13
+Stack now 0 2 4 5 6 7 8 9 10 15 13
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 18
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 29
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 40
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40
+Reading a token
+Next token is token TOK_TYPE_PTR ()
+Shifting token TOK_TYPE_PTR ()
+Entering state 50
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 60
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 70
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 80
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 89
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 97
+Stack now 0 2 4 5 6 7 8 9 10 15 13 18 29 40 50 60 70 80 89 97
+Reducing stack by rule 5 (line 154):
+   $1 = token TOK_STORE ()
+   $2 = token TOK_TYPE ()
+   $3 = token TOK_UINT ()
+   $4 = token TOK_SEPARATOR ()
+   $5 = token TOK_TYPE_PTR ()
+   $6 = token TOK_SSAINDEX ()
+   $7 = token TOK_UINT ()
+   $8 = token TOK_SEPARATOR ()
+   $9 = token TOK_ALIGN ()
+   $10 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 11
+Stack now 0 2 4 5 6 7 8 9 10 15 11
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 16
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16
+Reading a token
+Next token is token TOK_EQUAL ()
+Shifting token TOK_EQUAL ()
+Entering state 21
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21
+Reading a token
+Next token is token TOK_LOAD ()
+Shifting token TOK_LOAD ()
+Entering state 32
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 43
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 53
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53
+Reading a token
+Next token is token TOK_TYPE_PTR ()
+Shifting token TOK_TYPE_PTR ()
+Entering state 63
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53 63
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 73
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53 63 73
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 82
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53 63 73 82
+Reading a token
+Next token is token TOK_SEPARATOR ()
+Shifting token TOK_SEPARATOR ()
+Entering state 91
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53 63 73 82 91
+Reading a token
+Next token is token TOK_ALIGN ()
+Shifting token TOK_ALIGN ()
+Entering state 99
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53 63 73 82 91 99
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 102
+Stack now 0 2 4 5 6 7 8 9 10 15 11 16 21 32 43 53 63 73 82 91 99 102
+Reducing stack by rule 8 (line 187):
+   $1 = token TOK_SSAINDEX ()
+   $2 = token TOK_UINT ()
+   $3 = token TOK_EQUAL ()
+   $4 = token TOK_LOAD ()
+   $5 = token TOK_TYPE ()
+   $6 = token TOK_SEPARATOR ()
+   $7 = token TOK_TYPE_PTR ()
+   $8 = token TOK_SSAINDEX ()
+   $9 = token TOK_UINT ()
+   $10 = token TOK_SEPARATOR ()
+   $11 = token TOK_ALIGN ()
+   $12 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_RETURN ()
+Shifting token TOK_RETURN ()
+Entering state 12
+Stack now 0 2 4 5 6 7 8 9 10 15 12
+Reading a token
+Next token is token TOK_TYPE ()
+Shifting token TOK_TYPE ()
+Entering state 17
+Stack now 0 2 4 5 6 7 8 9 10 15 12 17
+Reading a token
+Next token is token TOK_SSAINDEX ()
+Shifting token TOK_SSAINDEX ()
+Entering state 22
+Stack now 0 2 4 5 6 7 8 9 10 15 12 17 22
+Reading a token
+Next token is token TOK_UINT ()
+Shifting token TOK_UINT ()
+Entering state 38
+Stack now 0 2 4 5 6 7 8 9 10 15 12 17 22 38
+Reducing stack by rule 14 (line 225):
+   $1 = token TOK_RETURN ()
+   $2 = token TOK_TYPE ()
+   $3 = token TOK_SSAINDEX ()
+   $4 = token TOK_UINT ()
+-> $$ = nterm stmt ()
+Entering state 20
+Stack now 0 2 4 5 6 7 8 9 10 15 20
+Reducing stack by rule 17 (line 241):
+   $1 = nterm stmt_list ()
+   $2 = nterm stmt ()
+-> $$ = nterm stmt_list ()
+Entering state 15
+Stack now 0 2 4 5 6 7 8 9 10 15
+Reading a token
+Next token is token TOK_RBRACE ()
+Shifting token TOK_RBRACE ()
+Entering state 19
+Stack now 0 2 4 5 6 7 8 9 10 15 19
+Reducing stack by rule 2 (line 136):
+   $1 = nterm function ()
+   $2 = token TOK_DEFINE ()
+   $3 = token TOK_TYPE ()
+   $4 = token TOK_GLOBAL ()
+   $5 = token TOK_IDENTIFIER ()
+   $6 = token TOK_LPAREN ()
+   $7 = token TOK_RPAREN ()
+   $8 = token TOK_LBRACE ()
+   $9 = nterm stmt_list ()
+   $10 = token TOK_RBRACE ()
+-> $$ = nterm function ()
+Entering state 2
+Stack now 0 2
+Reading a token
+Now at end of input.
+Reducing stack by rule 1 (line 132):
+   $1 = nterm function ()
+-> $$ = nterm program ()
+Entering state 1
+Stack now 0 1
+Now at end of input.
+Shifting token "end of file" ()
+Entering state 3
+Stack now 0 1 3
+Stack now 0 1 3
+Cleanup: popping token "end of file" ()
+Cleanup: popping nterm program ()

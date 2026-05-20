@@ -6,10 +6,13 @@ int myFunction()
    int a = 0;
    int alpha;
 
-   y++;
-   x = y + z;
-   z++;
-   alpha = !a;
+   do{
+      y++;
+      x = y + z;
+      z++;
+      alpha = x + z;
+
+   } while (z < 900);
 
    return alpha;
 }
